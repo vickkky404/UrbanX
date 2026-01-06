@@ -3,68 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>UrbanX-Homepage</title>
-    <style>
-        <style>
-    body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, sans-serif;
-        background-color: #f4f6f8;
-    }
-
-    header {
-        background: linear-gradient(135deg, #111827, #1f2933);
-        padding: 18px 60px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    }
-
-    header h1 {
-        margin: 0;
-        color: #ffffff;
-        font-size: 26px;
-        letter-spacing: 1px;
-        font-weight: 600;
-    }
-
-    nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 35px;
-    }
-
-    nav ul li a {
-        text-decoration: none;
-        color: #e5e7eb;
-        font-size: 16px;
-        font-weight: 500;
-        position: relative;
-        transition: color 0.3s ease;
-    }
-
-    nav ul li a:hover {
-        color: #38bdf8;
-    }
-
-    nav ul li a::after {
-        content: "";
-        position: absolute;
-        width: 0%;
-        height: 2px;
-        background: #38bdf8;
-        left: 0;
-        bottom: -6px;
-        transition: width 0.3s ease;
-    }
-
-    nav ul li a:hover::after {
-        width: 100%;
-    }
-</style>
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
@@ -78,6 +17,29 @@
         </ul>
     </nav>
 </header>
+
+<main>
+    <section class="hero">
+        <h2>Your Gateway to Urban Living</h2>
+        <p>Discover the best places to live, work, and play in the city.</p>
+        <a href="services.html" class="btn">Explore Our Services</a>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <h3>Find Your Dream Home</h3>
+            <p>Browse through thousands of listings to find the perfect home for you.</p>
+        </div>
+        <div class="feature">
+            <h3>Local Insights</h3>
+            <p>Get insider tips on the best neighborhoods, schools, and amenities.</p>
+        </div>
+        <div class="feature">
+            <h3>Expert Support</h3>
+            <p>Our team of experts is here to help you every step of the way.</p>
+        </div>
+    </section>
+</main>
 
 </body>
 </html>
