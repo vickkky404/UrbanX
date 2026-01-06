@@ -1,0 +1,132 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background-color: #f4f6f8;
+}
+
+header {
+    background: linear-gradient(135deg, #111827, #1f2933);
+    padding: 18px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+header h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 26px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 35px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #e5e7eb;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #38bdf8;
+}
+
+nav ul li a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background: #38bdf8;
+    left: 0;
+    bottom: -6px;
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+main {
+    width: 100%;
+    padding: 60px 8%;
+    box-sizing: border-box;
+}
+.hero {
+    background: linear-gradient(rgba(17,24,39,0.8), rgba(17,24,39,0.8)),
+                url('https://images.unsplash.com/1600585154340-be6161a56a0c') center/cover no-repeat;
+    color: #ffffff;
+    padding: 100px 60px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.hero h2 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #d1d5db;
+}
+
+.hero .btn {
+    display: inline-block;
+    background: #38bdf8;
+    color: #0f172a;
+    padding: 14px 36px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.hero .btn:hover {
+    background: #0ea5e9;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+.features {
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 35px;
+}
+
+.feature {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    transition: 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.feature h3 {
+    color: #0f172a;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.feature p {
+    color: #475569;
+    line-height: 1.6;
+    font-size: 15px;
+}
