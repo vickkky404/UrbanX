@@ -1,2 +1,2 @@
 backend --> flask
-database--> SQLite , postgres
+database --> SQLite , postgres
