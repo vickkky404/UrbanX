@@ -1,4 +1,4 @@
-# importing flask modole and calling a perticular flask file
+# importing flask module and calling a perticular flask file
 from flask import Flask
 
 # creates the instance for the flask  class
