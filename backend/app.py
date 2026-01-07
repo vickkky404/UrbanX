@@ -5,7 +5,7 @@ from flask import Flask
 #  app = Flask(__name__) determines the class path
 app = Flask(__name__)
 
-# The route() decorator tells Flask what URL should trigger the function
+# The route() decorator tells Flask what URL should trigger the function....
 @app.route('/')
 def home():
     return "UrbanX Backend Implementation"
