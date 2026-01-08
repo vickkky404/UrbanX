@@ -11,5 +11,6 @@ def home():
     return "UrbanX Backend Implementation"
 #  ///////////////////
 # runs the applicaiton
+# defualt port for flask is 5000
 if __name__ == "__main__":
     app.run(debug=True)
