@@ -648,3 +648,195 @@ footer {
     font-size: 14px;
     line-height: 1.5;
 }
+
+/* Contact Page Styles */
+.contact-hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f0f9ff;
+    border-radius: 16px;
+    margin-bottom: 50px;
+}
+
+.contact-hero h2 {
+    font-size: 36px;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.contact-hero p {
+    color: #64748b;
+    font-size: 18px;
+}
+
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.contact-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.contact-info h3 {
+    font-size: 24px;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.contact-info p {
+    color: #475569;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.info-item .icon {
+    font-size: 24px;
+}
+
+.contact-form-wrapper {
+    flex: 1.5;
+    min-width: 300px;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 600;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #38bdf8;
+    outline: none;
+}
+
+.btn-submit {
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+.btn-submit:hover {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+/* Auth Pages (Login/Signup) Styles */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #0f172a;
+}
+
+.login-container form .form-group {
+    margin-bottom: 20px;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 500;
+}
+
+.login-container input[type="text"],
+.login-container input[type="email"],
+.login-container input[type="password"],
+.login-container select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.brand-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: white;
+}
+
+.login-links, .switch-auth {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.login-links a, .switch-auth a {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-links a:hover, .switch-auth a:hover {
+    text-decoration: underline;
+}
+
+.captain-login {
+    border-top: 5px solid #0ea5e9;
+}
+
+.admin-login {
+    border-top: 5px solid #ef4444;
+}
