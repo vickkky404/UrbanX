@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanX - User Signup</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header>
+    <h1>UrbanX</h1>
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../about.html">About Us</a></li>
+            <li><a href="../exploreOurServices.html">Services</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="UserLogin.html">Login/Signup</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div class="login-container">
+        <h2>Create an Account</h2>
+        <form action="/user/signup" method="post">
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit" class="btn-submit">Sign Up</button>
+
+            <p class="switch-auth">
+                Already have an account? <a href="UserLogin.html">Login here</a>
+            </p>
+        </form>
+    </div>
+</main>
+<footer>
+    <p>&copy; 2026 UrbanX. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
