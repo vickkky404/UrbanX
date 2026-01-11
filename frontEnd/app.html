@@ -275,15 +275,24 @@
                 margin: 0;
             }
             .sidebar ul li a.active {
-                background: rgba(56, 189, 248, 0.2);
+                background: rgba(56, 189, 248, 0.1); /* Softer active state */
                 color: #38bdf8;
+            }
+            .sidebar ul li a.active::after {
+                content: '';
+                position: absolute;
+                bottom: 5px;
+                width: 4px;
+                height: 4px;
+                background: #38bdf8;
+                border-radius: 50%;
             }
 
             .map-area {
                 flex: 1;
                 width: 100%;
                 /* Adjust for bottom nav */
-                height: calc(100vh - 60px);
+                height: calc(100vh - 65px);
                 position: relative;
                 overflow: hidden; /* Prevent body scroll */
             }
@@ -294,126 +303,130 @@
                 left: 0;
                 bottom: 0;
                 top: auto;
-                padding: 20px 20px 30px 20px; /* Extra bottom padding */
-                border-radius: 20px 20px 0 0;
-                max-height: 70vh;
+                padding: 15px 20px 25px 20px;
+                border-radius: 24px 24px 0 0;
+                max-height: 75vh;
                 overflow-y: auto;
                 box-sizing: border-box;
                 border: none;
-                box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
-                /* Allow dragging indicator later if needed */
+                box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+                transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                z-index: 2000;
             }
+
+            /* Drag Handle */
+            .booking-panel::before {
+                content: '';
+                display: block;
+                width: 40px;
+                height: 4px;
+                background: #e2e8f0;
+                margin: 0 auto 15px auto;
+                border-radius: 2px;
+            }
+
             .booking-panel h3 {
                 font-size: 18px;
-                justify-content: center;
+                justify-content: flex-start; /* Align left */
+                margin-bottom: 15px;
+            }
+
+            .input-group {
+                margin-bottom: 12px;
             }
 
             .input-group input, .input-group select {
-                padding: 14px 12px 14px 45px; /* Larger tap area */
-                font-size: 16px; /* Prevent zoom on iOS */
+                padding: 14px 12px 14px 45px;
+                font-size: 16px;
+                background: #f8fafc; /* Slight bg for inputs */
+                border: 1px solid #e2e8f0;
+            }
+            .input-group input:focus {
+                background: #fff;
             }
 
+            .ride-btn {
+                margin-top: 10px;
+                padding: 16px;
+                font-size: 16px;
+                border-radius: 12px;
+                background: #0f172a;
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+            }
+
+            /* Floating "My Location" Button specifically for mobile map view */
+            .mobile-location-btn {
+                display: flex !important; /* Show only on mobile */
+                width: 44px;
+                height: 44px;
+                background: white;
+                border-radius: 50%;
+                position: absolute;
+                bottom: 340px; /* Above the panel approximately - adjusts dynamically could be better but CSS simple fixation */
+                right: 20px;
+                z-index: 1500;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                color: #0f172a;
+                font-size: 18px;
+                border: none;
+            }
+
+            /* Adjust panel height contextually */
+            #book-ride-section {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end; /* Push content to bottom */
+            }
+
+            /* Hide sections better */
+            #my-rides-section, #wallet-section, #settings-section {
+                background: #f8fafc;
+                padding: 20px 15px;
+                padding-bottom: 80px; /* Space for bottom nav */
+            }
+
+            /* Cards on mobile */
             .wallet-card {
-                width: 100%;
-                max-width: none;
-                margin-bottom: 20px;
-                padding: 20px;
+                padding: 25px 20px;
+                margin-bottom: 25px;
+                box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
             }
             .wallet-amount {
-                font-size: 32px;
+                font-size: 36px;
+            }
+            .wallet-actions {
+                gap: 15px;
+            }
+            .btn-wallet {
+                padding: 14px;
+                border-radius: 12px;
             }
 
-            #my-rides-section, #wallet-section, #settings-section {
-                padding: 15px;
-                height: 100%;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            /* Fix search results overlay on mobile */
-            .search-results {
-                position: fixed;
-                left: 20px;
-                right: 20px;
-                width: auto !important;
-                max-height: 200px;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-                border-radius: 8px;
-            }
-
+            /* Improve Stats */
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 15px;
+                gap: 12px;
             }
             .stat-card {
                 padding: 15px;
+                border: none;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             }
-            .stat-card p {
-                font-size: 20px;
+            .stat-card h4 { font-size: 12px; }
+            .stat-card p { font-size: 18px; }
+
+            /* Ride List Items */
+            #rides-list > div {
+                border-radius: 12px !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+                border: none !important;
+                border-left: 5px solid #38bdf8 !important;
             }
         }
 
-        /* Wallet Card Styles */
-        .wallet-card {
-            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        .wallet-circle-1 {
-            position: absolute; top: -20px; right: -20px; width: 100px; height: 100px;
-            background: rgba(255,255,255,0.1); border-radius: 50%;
-        }
-        .wallet-circle-2 {
-            position: absolute; bottom: -40px; left: -20px; width: 150px; height: 150px;
-            background: rgba(255,255,255,0.05); border-radius: 50%;
-        }
-        .wallet-label {
-            margin: 0; opacity: 0.8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .wallet-amount {
-            margin: 10px 0; font-size: 42px; font-weight: 700; font-family: 'Courier New', monospace;
-        }
-        .wallet-actions {
-            margin-top: 25px; display: flex; gap: 10px;
-        }
-        .btn-wallet {
-            border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1;
-            display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s;
-        }
-        .btn-wallet:hover { transform: translateY(-2px); }
-        .btn-add-fund { background: #38bdf8; color: #0f172a; }
-        .btn-history { background: rgba(255,255,255,0.1); color: white; }
-
-        /* Transaction List */
-        .transaction-item {
-            background: white; padding: 15px; border-radius: 8px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid #e2e8f0; margin-bottom: 10px;
-            transition: box-shadow 0.2s;
-        }
-        .transaction-item:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .tx-icon {
-            width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-        }
-        .tx-credit { background: #dcfce7; color: #16a34a; }
-        .tx-debit { background: #fee2e2; color: #ef4444; }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-bottom: 30px;
-        }
-        .stat-card {
-            background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;
-            display: flex; flex-direction: column; align-items: flex-start;
-        }
-        .stat-card h4 { margin: 0 0 10px; color: #64748b; font-size: 14px; }
-        .stat-card p { margin: 0; font-size: 24px; font-weight: bold; color: #0f172a; }
+        .mobile-location-btn { display: none; } /* Hidden on desktop */
     </style>
 </head>
 <body>
@@ -437,6 +450,12 @@
         <div id="book-ride-section" class="dashboard-section" style="width: 100%; height: 100%; position: relative;">
             <!-- Real Map Container -->
             <div id="map"></div>
+
+            <!-- Mobile separate location button -->
+            <button class="mobile-location-btn" onclick="useCurrentLocation()">
+                <i class="fas fa-crosshairs"></i>
+            </button>
+
             <!-- Leaflet JS -->
             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 

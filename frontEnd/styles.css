@@ -11,6 +11,14 @@ header {
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    position: relative; /* For absolute pos of mobile nav if needed */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: auto;
 }
 
 header h1 {
@@ -19,6 +27,15 @@ header h1 {
     font-size: 26px;
     letter-spacing: 1px;
     font-weight: 600;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 nav ul {
@@ -839,4 +856,201 @@ footer {
 
 .admin-login {
     border-top: 5px solid #ef4444;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    /* Header & Navigation */
+    header {
+        flex-direction: column;
+        padding: 15px 20px;
+        align-items: stretch; /* Stretch to fill width */
+    }
+
+    .header-content {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header h1 {
+        font-size: 24px;
+        margin: 0;
+        width: auto; /* Allow room for button */
+    }
+
+    .menu-toggle {
+        display: block; /* Show hamburger button */
+    }
+
+    nav {
+        width: 100%;
+        display: none; /* Hide nav by default on mobile */
+        margin-top: 15px;
+    }
+
+    nav.active {
+        display: block; /* Show when active class is added */
+        animation: slideDown 0.3s ease forwards;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        padding: 0;
+    }
+
+    nav ul li {
+        width: 100%;
+        margin: 0;
+    }
+
+    nav ul li a {
+        display: block;
+        padding: 12px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        font-size: 16px;
+        color: white; /* Ensure text is visible */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    nav ul li a:hover {
+        background: rgba(255,255,255,0.2);
+        color: #38bdf8;
+    }
+
+    nav ul li a::after {
+        display: none;
+    }
+
+    /* Main Container */
+    main {
+        padding: 20px;
+        width: 100%;
+        overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    /* Hero Section */
+    .hero {
+        padding: 60px 20px;
+        margin-bottom: 40px;
+        background-position: center;
+        border-radius: 12px;
+    }
+
+    .hero h2 {
+        font-size: 32px;
+        line-height: 1.2;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .hero .btn {
+        padding: 15px 30px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
+    }
+
+    /* Features Section */
+    .features {
+        margin-top: 40px;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .feature {
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    /* Services Page Mobile */
+    .services-hero {
+        padding: 50px 20px;
+        background-position: center;
+    }
+
+    .services-hero h2 {
+        font-size: 32px;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    /* How It Works & Steps */
+    .how-it-works, .testimonials, .cta-banner {
+        margin-top: 50px;
+    }
+
+    .steps-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .cta-banner {
+        padding: 40px 20px;
+    }
+
+    .cta-banner h2 {
+        font-size: 28px;
+    }
+
+    /* Safety & About Sections */
+    .safety-promise, .mission-section, .about-hero {
+        padding: 40px 20px;
+        flex-direction: column;
+    }
+
+    .safety-badges, .mission-stats, .team-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .mission-text {
+        text-align: center;
+    }
+
+    .mission-text h3::after {
+        margin: 10px auto 0;
+    }
+
+    .stat-number {
+        font-size: 42px;
+    }
+
+    /* Contact Page Mobile */
+    .contact-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .contact-form-wrapper {
+        padding: 30px 20px;
+    }
+
+    /* Login/Signup Containers */
+    .login-container {
+        margin: 20px auto;
+        padding: 30px 20px;
+        width: 100%;
+        box-shadow: none; /* Flatter look on mobile */
+        border: 1px solid #e2e8f0;
+    }
 }
