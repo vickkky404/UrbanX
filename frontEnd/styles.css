@@ -294,3 +294,211 @@ footer {
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
+/* About Us Page Styles */
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #1f2933, #111827);
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+    border-radius: 16px;
+    margin-bottom: 60px;
+    overflow: hidden;
+}
+
+/* Abstract background shapes for hero */
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(56, 189, 248, 0.1);
+    border-radius: 50%;
+}
+.about-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 150px;
+    height: 150px;
+    background: rgba(14, 165, 233, 0.1);
+    border-radius: 50%;
+}
+
+.about-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-content h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.about-content p {
+    font-size: 20px;
+    color: #e5e7eb;
+    font-weight: 300;
+}
+
+.mission-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 50px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 60px;
+}
+
+.mission-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.mission-text h3 {
+    font-size: 32px;
+    color: #0f172a;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.mission-text h3::after {
+    content: '';
+    display: block;
+    width: 50%;
+    height: 3px;
+    background: #38bdf8;
+    margin-top: 5px;
+    border-radius: 2px;
+}
+
+.mission-text p {
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.8;
+}
+
+.mission-stats {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    min-width: 300px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 36px;
+    font-weight: 800;
+    color: #0ea5e9;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.our-story {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 80px;
+}
+
+.our-story h3 {
+    font-size: 32px;
+    color: #0f172a;
+    margin-bottom: 30px;
+}
+
+.story-content p {
+    font-size: 18px;
+    color: #4b5563;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.team-section {
+    text-align: center;
+}
+
+.team-section h3 {
+    font-size: 32px;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.section-subtitle {
+    color: #64748b;
+    margin-bottom: 50px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.team-member {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.member-img {
+    width: 100px;
+    height: 100px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: #94a3b8;
+    font-weight: bold;
+}
+
+.team-member h4 {
+    margin: 0 0 5px;
+    color: #0f172a;
+    font-size: 20px;
+}
+
+.team-member .role {
+    color: #0ea5e9;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.team-member .bio {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
