@@ -2,80 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>UrbanX-UserLogin</title>
+    <title>UrbanX - User Login</title>
     <link rel="stylesheet" href="../styles.css">
-    <style>
-        hero {
-            display: block;
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        hero h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        hero form {
-            display: flex;
-            flex-direction: column;
-        }
-        hero label {
-            margin-bottom: 5px;
-        }
-        hero input[type="text"],
-        hero input[type="password"] {
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        hero input[type="submit"] {
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        hero input[type="submit"]:hover {
-            background-color: #218838;
-        }
-        .li{
-            display: block;
-        }
-    </style>
-
 </head>
 <body>
 <header>
-    <h1>Welcome to UrbanX</h1>
+    <h1>UrbanX</h1>
     <nav>
         <ul>
-
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="UserLogin.html">Login/Signup</a></li>
-            <li><a href="../services.html">Services</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../about.html">About Us</a></li>
-            <li><a href="CaptainLogin.html">Login as Captain</a></li>
+            <li><a href="../exploreOurServices.html">Services</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+            <li><a href="UserLogin.html" class="active">Login/Signup</a></li>
         </ul>
     </nav>
 </header>
 
-<hero>
-    <h2>User Login</h2>
-    <form action="/user/login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" value="Login">
+<main>
+    <div class="login-container">
+        <h2>User Login</h2>
+        <form action="/user/login" method="post">
+            <div class="form-group">
+                <label for="username">Username/Email:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
 
-        <li><a href="CaptainLogin.html">New to UrbanX ? SIGNP</a></li>
-    </form>
-</hero>
+            <div class="login-links">
+                <p>New to UrbanX? <a href="UserSignup.html">Sign Up here</a></p>
+                <p>Are you a Captain? <a href="CaptainLogin.html">Login as Captain</a></p>
+            </div>
+        </form>
+    </div>
+</main>
 
+<footer>
+    <p>&copy; 2026 UrbanX. All rights reserved.</p>
+</footer>
 </body>
 </html>
