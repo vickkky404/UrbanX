@@ -221,6 +221,138 @@
             80%, 100% { text-shadow: .25em 0 0 #64748b, .5em 0 0 #64748b;}
         }
 
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column-reverse;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .sidebar {
+                width: 100%;
+                height: 60px; /* Slimmer bottom bar */
+                flex-direction: row;
+                padding: 0;
+                justify-content: space-evenly;
+                align-items: center;
+                background: #1f2933;
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+                z-index: 3000;
+                position: relative;
+            }
+            .sidebar h2, .sidebar #user-info {
+                display: none;
+            }
+            .sidebar ul {
+                display: flex;
+                width: 100%;
+                justify-content: space-evenly;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+            .sidebar ul li {
+                margin: 0;
+                flex: 1; /* Distribute evenly */
+                display: flex;
+                justify-content: center;
+            }
+            .sidebar ul li a {
+                padding: 0;
+                font-size: 0; /* Hide text */
+                text-align: center;
+                border-radius: 12px;
+                width: 44px; /* Larger touch target */
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s;
+            }
+            .sidebar ul li a i {
+                font-size: 22px; /* Larger icon */
+                margin: 0;
+            }
+            .sidebar ul li a.active {
+                background: rgba(56, 189, 248, 0.2);
+                color: #38bdf8;
+            }
+
+            .map-area {
+                flex: 1;
+                width: 100%;
+                /* Adjust for bottom nav */
+                height: calc(100vh - 60px);
+                position: relative;
+                overflow: hidden; /* Prevent body scroll */
+            }
+
+            /* Bottom Sheet Style Booking Panel */
+            .booking-panel {
+                width: 100%;
+                left: 0;
+                bottom: 0;
+                top: auto;
+                padding: 20px 20px 30px 20px; /* Extra bottom padding */
+                border-radius: 20px 20px 0 0;
+                max-height: 70vh;
+                overflow-y: auto;
+                box-sizing: border-box;
+                border: none;
+                box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
+                /* Allow dragging indicator later if needed */
+            }
+            .booking-panel h3 {
+                font-size: 18px;
+                justify-content: center;
+            }
+
+            .input-group input, .input-group select {
+                padding: 14px 12px 14px 45px; /* Larger tap area */
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+
+            .wallet-card {
+                width: 100%;
+                max-width: none;
+                margin-bottom: 20px;
+                padding: 20px;
+            }
+            .wallet-amount {
+                font-size: 32px;
+            }
+
+            #my-rides-section, #wallet-section, #settings-section {
+                padding: 15px;
+                height: 100%;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Fix search results overlay on mobile */
+            .search-results {
+                position: fixed;
+                left: 20px;
+                right: 20px;
+                width: auto !important;
+                max-height: 200px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                border-radius: 8px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .stat-card {
+                padding: 15px;
+            }
+            .stat-card p {
+                font-size: 20px;
+            }
+        }
+
         /* Wallet Card Styles */
         .wallet-card {
             background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
