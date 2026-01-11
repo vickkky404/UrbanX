@@ -133,38 +133,184 @@ main {
 
 /* Cleaned Generic Styles - body and header removed to use top definitions */
 
-/* Services Section (used in exploreOurServices.html) */
-.services {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 2rem 0;
-    gap: 1.5rem;
-}
-
-.service {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1.5rem;
-    width: 300px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* Explore Our Services Page Styles */
+.services-hero {
+    background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.8)), url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80') center/cover;
+    color: white;
+    padding: 80px 40px;
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 16px;
+    margin-bottom: 60px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.service:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.services-hero h2 {
+    font-size: 42px;
+    margin-bottom: 15px;
 }
 
-.service h3 {
-    margin-bottom: 1rem;
-    color: #333;
+.services-hero p {
+    font-size: 18px;
+    color: #cbd5e1;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.service p {
-    color: #666;
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 80px;
+}
+
+.service-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #38bdf8;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: left;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-color: #38bdf8;
+}
+
+.service-card:hover::before {
+    transform: scaleX(1);
+}
+
+.service-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 20px;
+    background: #f0f9ff;
+    border-radius: 50%;
+    line-height: 1;
+}
+
+.service-card h3 {
+    font-size: 24px;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+.service-card p {
+    color: #64748b;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.service-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    text-align: left;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+}
+
+.service-features-list li {
+    padding-left: 25px;
+    margin-bottom: 10px;
+    color: #475569;
+    position: relative;
+    font-size: 15px;
+}
+
+.service-features-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #38bdf8;
+    font-weight: bold;
+}
+
+.service-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #0f172a;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.service-btn:hover {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+.safety-promise {
+    background: white;
+    padding: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background: linear-gradient(to right, #ffffff, #f0f9ff);
+}
+
+.promise-content {
+    max-width: 700px;
+}
+
+.promise-content h2 {
+    font-size: 32px;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.promise-content p {
+    font-size: 18px;
+    color: #475569;
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.safety-badges {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.safety-badges span {
+    font-weight: 600;
+    color: #0369a1;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
 }
 
 /* Footer Styles */
