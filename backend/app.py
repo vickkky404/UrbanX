@@ -46,8 +46,17 @@ class Ride(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
 
+def ensure_default_admin():
+    if not Admin.query.filter_by(email="admin@urbanx.com").first():
+        admin = Admin(email="admin@urbanx.com")
+        admin.set_password("admin123")
+        db.session.add(admin)
+        db.session.commit()
+
+
 with app.app_context():
     db.create_all()
+    ensure_default_admin()
 
 # The route() decorator tells Flask what URL should trigger the function....
 @app.route('/')
@@ -62,8 +71,10 @@ def urban_app():
 @app.route('/captain/login', methods=['POST'])
 def captain_login():
     data = request.get_json(silent=True) or request.form
-    email = data.get('email')
-    password = data.get('password')
+    email = (data.get('email') or '').strip()
+    password = (data.get('password') or '').strip()
+    if not email or not password:
+        return jsonify({"status": "error", "message": "Email and password are required"}), 400
     captain = Captain.query.filter_by(email=email).first()
     if captain and captain.check_password(password):
         return jsonify({"status": "ok", "message": "Captain authenticated"}), 200
@@ -72,9 +83,11 @@ def captain_login():
 @app.route('/captain/signup', methods=['POST'])
 def captain_signup():
     data = request.get_json(silent=True) or request.form
-    name = data.get('name')
-    email = data.get('email')
-    password = data.get('password')
+    name = (data.get('name') or '').strip()
+    email = (data.get('email') or '').strip()
+    password = (data.get('password') or '').strip()
+    if not name or not email or not password:
+        return jsonify({"status": "error", "message": "Name, email, and password are required"}), 400
     if Captain.query.filter_by(email=email).first():
         return jsonify({"status": "error", "message": "Email already registered"}), 400
     captain = Captain(name=name, email=email)
@@ -86,12 +99,31 @@ def captain_signup():
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
     data = request.get_json(silent=True) or request.form
-    email = data.get('email')
-    password = data.get('password')
+    email = (data.get('email') or '').strip()
+    password = (data.get('password') or '').strip()
+    if not email or not password:
+        return jsonify({"status": "error", "message": "Email and password are required"}), 400
     admin = Admin.query.filter_by(email=email).first()
     if admin and admin.check_password(password):
         return jsonify({"status": "ok", "message": "Admin authenticated"}), 200
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+
+@app.route('/rides', methods=['GET'])
+def list_rides():
+    rides = Ride.query.order_by(Ride.created_at.desc()).all()
+    return jsonify({
+        "status": "ok",
+        "rides": [
+            {
+                "id": r.id,
+                "pickup": r.pickup,
+                "dropoff": r.dropoff,
+                "status": r.status,
+                "created_at": r.created_at.isoformat(),
+                "updated_at": r.updated_at.isoformat(),
+            } for r in rides
+        ]
+    }), 200
 
 @app.route('/rides', methods=['POST'])
 def create_ride():
