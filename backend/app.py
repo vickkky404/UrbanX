@@ -44,6 +44,7 @@ class User(db.Model):
     fullname = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+    balance = db.Column(db.Float, default=1000.0)  # Default sign-up bonus
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
@@ -301,6 +302,45 @@ def geocode_location():
     except Exception as e:
         print(f"Geocoding error: {e}")
         return jsonify([])
+
+@app.route('/api/user/<int:user_id>/wallet', methods=['GET', 'POST'])
+def user_wallet(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"status": "error", "message": "User not found"}), 404
+
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        amount = float(data.get('amount', 0))
+        if amount > 0:
+            user.balance += amount
+            db.session.commit()
+            return jsonify({"status": "ok", "message": "Funds added", "balance": user.balance})
+        return jsonify({"status": "error", "message": "Invalid amount"}), 400
+
+    return jsonify({"status": "ok", "balance": user.balance, "currency": "₹"})
+
+@app.route('/api/user/<int:user_id>/profile', methods=['POST'])
+def update_profile(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"status": "error", "message": "User not found"}), 404
+
+    data = request.get_json(silent=True) or request.form
+    fullname = data.get('fullname')
+    email = data.get('email')
+
+    if fullname:
+        user.fullname = fullname
+    if email:
+        # Check if email is taken by someone else
+        existing = User.query.filter_by(email=email).first()
+        if existing and existing.id != user.id:
+            return jsonify({"status": "error", "message": "Email already in use"}), 400
+        user.email = email
+
+    db.session.commit()
+    return jsonify({"status": "ok", "message": "Profile updated", "user": {"id": user.id, "fullname": user.fullname, "email": user.email}}), 200
 
 #  ///////////////////
 # runs the applicaiton

@@ -231,8 +231,8 @@
         <ul>
             <li><a href="#" class="active" onclick="showSection('book-ride', event)">Book a Ride</a></li>
             <li><a href="#" onclick="showSection('my-rides', event); loadRides();">My Rides</a></li>
-            <li><a href="#">Wallet</a></li>
-            <li><a href="#">Settings</a></li>
+            <li><a href="#" onclick="showSection('wallet', event)">Wallet</a></li>
+            <li><a href="#" onclick="showSection('settings', event)">Settings</a></li>
             <li><a href="#" onclick="logout()">Logout</a></li>
         </ul>
     </div>
@@ -301,6 +301,71 @@
                 <p>Loading rides...</p>
             </div>
         </div>
+
+        <!-- Wallet Section -->
+        <div id="wallet-section" class="dashboard-section" style="display: none; width: 100%; padding: 40px; overflow-y: auto; background: #f4f6f8; box-sizing: border-box;">
+            <h2 style="color: #0f172a; margin-top: 0;">Wallet</h2>
+
+            <div style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: -40px; left: -20px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+
+                <p style="margin: 0; opacity: 0.8; font-size: 14px;">Total Balance</p>
+                <h1 style="margin: 10px 0; font-size: 42px; font-weight: 700;">₹<span id="wallet-balance">0.00</span></h1>
+
+                <div style="margin-top: 25px; display: flex; gap: 10px;">
+                    <button onclick="addFunds()" style="background: #38bdf8; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1;">
+                        <i class="fas fa-plus"></i> Add Money
+                    </button>
+                    <button style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1;">
+                        <i class="fas fa-history"></i> History
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="color: #475569; font-size: 18px;">Recent Transactions</h3>
+                <div id="transaction-list" style="margin-top: 15px;">
+                    <div style="background: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; height: 40px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #16a34a;">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div>
+                                <p style="margin: 0; font-weight: 600; color: #0f172a;">Sign-up Bonus</p>
+                                <p style="margin: 0; font-size: 12px; color: #64748b;">Welcome Gift</p>
+                            </div>
+                        </div>
+                        <span style="color: #16a34a; font-weight: 600;">+₹1000.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings-section" class="dashboard-section" style="display: none; width: 100%; padding: 40px; overflow-y: auto; background: #f4f6f8; box-sizing: border-box;">
+            <h2 style="color: #0f172a; margin-top: 0;">Settings</h2>
+
+            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 600px;">
+                <h3 style="margin-top: 0; color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;">Profile Details</h3>
+
+                <form id="settings-form" style="margin-top: 20px;">
+                    <div class="input-group">
+                        <label style="display: block; margin-bottom: 5px; color: #475569; font-weight: 500;">Full Name</label>
+                        <input type="text" id="setting-name" name="fullname" style="padding-left: 12px;">
+                    </div>
+                    <div class="input-group">
+                        <label style="display: block; margin-bottom: 5px; color: #475569; font-weight: 500;">Email Address</label>
+                        <input type="email" id="setting-email" name="email" style="padding-left: 12px;">
+                    </div>
+
+                    <button type="submit" class="ride-btn" style="width: auto; padding: 10px 30px;">
+                        Save Changes
+                    </button>
+                    <div id="settings-msg" style="margin-top: 10px; display: none;"></div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -332,12 +397,23 @@
 
         // Update nav active state
         document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-        if(event && event.target) event.target.classList.add('active');
+        // Find the link that triggered this or match by href
+        if (event && event.target) {
+            event.target.classList.add('active');
+        } else {
+            // Fallback for manual calls
+            const link = document.querySelector(`.sidebar a[onclick*="${sectionId}"]`);
+            if (link) link.classList.add('active');
+        }
 
         // Resize map if visible
         if (sectionId === 'book-ride' && window.map) {
              setTimeout(() => { window.map.invalidateSize(); }, 100);
         }
+
+        // Load specific data
+        if (sectionId === 'wallet') loadWallet();
+        if (sectionId === 'settings') loadSettings();
     }
 
     let searchTimeout;
@@ -677,6 +753,108 @@
             list.innerHTML = '<p style="color: red;">Failed to load rides.</p>';
         }
     }
+
+    // Load Wallet
+    async function loadWallet() {
+        if (!user) return;
+        try {
+            const response = await fetch(`/api/user/${user.id}/wallet`);
+            const data = await response.json();
+            if (data.status === 'ok') {
+                document.getElementById('wallet-balance').textContent = data.balance.toFixed(2);
+            }
+        } catch (e) {
+            console.error('Wallet error:', e);
+        }
+    }
+
+    async function addFunds() {
+        const amount = prompt("Enter amount to add (₹):", "500");
+        if (amount && !isNaN(amount)) {
+            try {
+                const formData = new FormData();
+                formData.append('amount', amount);
+
+                const response = await fetch(`/api/user/${user.id}/wallet`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    alert('Funds added successfully!');
+                    loadWallet();
+                    // Add mock transaction to list
+                    const list = document.getElementById('transaction-list');
+                    const div = document.createElement('div');
+                    div.style.cssText = "background: white; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; margin-bottom: 10px;";
+                    div.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; height: 40px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #16a34a;">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div>
+                                <p style="margin: 0; font-weight: 600; color: #0f172a;">Funds Added</p>
+                                <p style="margin: 0; font-size: 12px; color: #64748b;">Wallet Top-up</p>
+                            </div>
+                        </div>
+                        <span style="color: #16a34a; font-weight: 600;">+₹${parseFloat(amount).toFixed(2)}</span>
+                    `;
+                    list.insertBefore(div, list.children[0]);
+                }
+            } catch (e) {
+                alert('Error adding funds');
+            }
+        }
+    }
+
+    // Settings
+    function loadSettings() {
+        if (!user) return;
+        document.getElementById('setting-name').value = user.fullname;
+        // Ideally we fetch latest from API but localStorage is ok for now unless we update
+    }
+
+    document.getElementById('settings-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('button');
+        const msg = document.getElementById('settings-msg');
+
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        try {
+            const formData = new FormData(this);
+            const response = await fetch(`/api/user/${user.id}/profile`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                msg.textContent = 'Profile updated successfully!';
+                msg.style.color = 'green';
+                msg.style.display = 'block';
+
+                // Update local User object
+                user.fullname = data.user.fullname;
+                user.email = data.user.email;
+                localStorage.setItem('urbanx_user', JSON.stringify(user));
+                document.getElementById('user-info').textContent = `Welcome, ${user.fullname}`;
+            } else {
+                msg.textContent = data.message;
+                msg.style.color = 'red';
+                msg.style.display = 'block';
+            }
+        } catch (e) {
+            msg.textContent = 'Network error';
+            msg.style.color = 'red';
+            msg.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Save Changes';
+        }
+    });
 </script>
 
 </body>
