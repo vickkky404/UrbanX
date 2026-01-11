@@ -23,7 +23,7 @@
 <main>
     <div class="login-container">
         <h2>User Login</h2>
-        <form action="/user/login" method="post">
+        <form id="loginForm">
             <div class="form-group">
                 <label for="username">Username/Email:</label>
                 <input type="text" id="username" name="username" required>
@@ -33,6 +33,7 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <button type="submit" class="btn-submit">Login</button>
+            <div id="error-msg" style="color: red; margin-top: 10px; display: none;"></div>
 
             <div class="login-links">
                 <p>New to UrbanX? <a href="UserSignup.html">Sign Up here</a></p>
@@ -41,6 +42,40 @@
         </form>
     </div>
 </main>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const errorMsg = document.getElementById('error-msg');
+
+        try {
+            const response = await fetch('/user/login', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Store user info
+                localStorage.setItem('urbanx_user', JSON.stringify({
+                    id: data.user_id,
+                    fullname: data.fullname
+                }));
+                // Redirect to dashboard
+                window.location.href = '../app.html';
+            } else {
+                errorMsg.textContent = data.message || 'Login failed';
+                errorMsg.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            errorMsg.textContent = 'An error occurred. Please try again.';
+            errorMsg.style.display = 'block';
+        }
+    });
+</script>
 
 <footer>
     <p>&copy; 2026 UrbanX. All rights reserved.</p>

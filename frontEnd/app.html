@@ -96,30 +96,162 @@
 <div class="app-container">
     <div class="sidebar">
         <h2>UrbanX</h2>
+        <div id="user-info" style="padding: 0 10px 20px; color: #38bdf8; font-size: 14px;"></div>
         <ul>
-            <li><a href="#" class="active">Book a Ride</a></li>
-            <li><a href="#">My Rides</a></li>
+            <li><a href="#" class="active" onclick="showSection('book-ride', event)">Book a Ride</a></li>
+            <li><a href="#" onclick="showSection('my-rides', event); loadRides();">My Rides</a></li>
             <li><a href="#">Wallet</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="index.html">Logout</a></li>
+            <li><a href="#" onclick="logout()">Logout</a></li>
         </ul>
     </div>
     <div class="map-area">
-        <!-- Placeholder for Map -->
-        <p>Map View Loading...</p>
+        <!-- Dashboard Sections -->
 
-        <div class="booking-panel">
-            <h3>Where to?</h3>
-            <div class="input-group">
-                <input type="text" placeholder="Pickup Location">
+        <!-- Book Ride Section -->
+        <div id="book-ride-section" class="dashboard-section" style="width: 100%; height: 100%; position: relative;">
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #94a3b8;">
+                <p style="font-size: 18px;">Interactive Map Placeholder</p>
             </div>
-            <div class="input-group">
-                <input type="text" placeholder="Dropoff Location">
+
+            <div class="booking-panel">
+                <h3>Where to?</h3>
+                <form id="bookingForm">
+                    <div class="input-group">
+                        <input type="text" id="pickup" name="pickup" placeholder="Pickup Location" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="dropoff" name="dropoff" placeholder="Dropoff Location" required>
+                    </div>
+                    <button type="submit" class="ride-btn">Search Rides</button>
+                </form>
+                <div id="booking-msg" style="margin-top: 10px; font-size: 14px;"></div>
             </div>
-            <button class="ride-btn">Search Rides</button>
+        </div>
+
+        <!-- My Rides Section -->
+        <div id="my-rides-section" class="dashboard-section" style="display: none; width: 100%; padding: 40px; overflow-y: auto; background: #f4f6f8; box-sizing: border-box;">
+            <h2 style="color: #0f172a; margin-top: 0;">My Rides</h2>
+            <div id="rides-list" style="display: grid; gap: 20px;">
+                <!-- Rides will be loaded here -->
+                <p>Loading rides...</p>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Auth Check
+    const user = JSON.parse(localStorage.getItem('urbanx_user'));
+    if (!user) {
+        // alert('Please login to access the dashboard');
+        window.location.href = 'Login/UserLogin.html';
+    } else {
+        document.getElementById('user-info').textContent = `Welcome, ${user.fullname}`;
+    }
+
+    function logout() {
+        localStorage.removeItem('urbanx_user');
+        window.location.href = 'index.html';
+    }
+
+    function showSection(sectionId, event) {
+        if(event) event.preventDefault();
+
+        // Hide all sections
+        document.querySelectorAll('.dashboard-section').forEach(el => el.style.display = 'none');
+        // Show target
+        const target = document.getElementById(sectionId + '-section');
+        if (target) {
+            target.style.display = 'block';
+        }
+
+        // Update nav active state
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        if(event && event.target) event.target.classList.add('active');
+    }
+
+    // Booking Logic
+    document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('button');
+        const msg = document.getElementById('booking-msg');
+        const pickup = document.getElementById('pickup').value;
+        const dropoff = document.getElementById('dropoff').value;
+
+        btn.disabled = true;
+        btn.textContent = 'Requesting...';
+        msg.textContent = '';
+        msg.style.color = 'black';
+
+        try {
+            const formData = new FormData();
+            formData.append('pickup', pickup);
+            formData.append('dropoff', dropoff);
+            if (user) formData.append('user_id', user.id);
+
+            const response = await fetch('/rides', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                msg.textContent = 'Ride Requested Successfully! Captains are being notified.';
+                msg.style.color = 'green';
+                this.reset();
+                // Optionally switch to my rides
+                // setTimeout(() => { showSection('my-rides', null); loadRides(); }, 1500);
+            } else {
+                msg.textContent = data.message || 'Error requesting ride.';
+                msg.style.color = 'red';
+            }
+        } catch (err) {
+            console.error(err);
+            msg.textContent = 'Network error.';
+            msg.style.color = 'red';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Search Rides';
+        }
+    });
+
+    // Load Rides
+    async function loadRides() {
+        const list = document.getElementById('rides-list');
+        list.innerHTML = '<p>Loading...</p>';
+
+        try {
+            const response = await fetch('/rides');
+            const data = await response.json();
+
+            if (data.status === 'ok') {
+                // Filter rides for current user (Client-side filtering for prototype)
+                const userRides = data.rides.filter(ride => ride.user_id == user.id);
+
+                if (userRides.length === 0) {
+                    list.innerHTML = '<p>No rides found.</p>';
+                    return;
+                }
+
+                list.innerHTML = userRides.map(ride => `
+                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #38bdf8;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <strong>Ride #${ride.id}</strong>
+                            <span style="background: #f0f9ff; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; font-weight: bold;">${ride.status}</span>
+                        </div>
+                        <p style="margin: 5px 0; color: #64748b;"><strong>From:</strong> ${ride.pickup}</p>
+                        <p style="margin: 5px 0; color: #64748b;"><strong>To:</strong> ${ride.dropoff}</p>
+                        <small style="color: #94a3b8; display: block; margin-top: 10px;">${new Date(ride.created_at).toLocaleString()}</small>
+                    </div>
+                `).join('');
+            }
+        } catch (err) {
+            console.error(err);
+            list.innerHTML = '<p style="color: red;">Failed to load rides.</p>';
+        }
+    }
+</script>
 
 </body>
 </html>

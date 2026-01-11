@@ -21,7 +21,7 @@
 <main>
     <div class="login-container">
         <h2>Create an Account</h2>
-        <form action="/user/signup" method="post">
+        <form id="signupForm">
             <div class="form-group">
                 <label for="fullname">Full Name:</label>
                 <input type="text" id="fullname" name="fullname" required>
@@ -39,6 +39,7 @@
                 <input type="password" id="confirm_password" name="confirm_password" required>
             </div>
             <button type="submit" class="btn-submit">Sign Up</button>
+            <div id="msg" style="margin-top: 10px; display: none;"></div>
 
             <p class="switch-auth">
                 Already have an account? <a href="UserLogin.html">Login here</a>
@@ -49,6 +50,48 @@
 <footer>
     <p>&copy; 2026 UrbanX. All rights reserved.</p>
 </footer>
+<script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const msg = document.getElementById('msg');
+        const pass = document.getElementById('password').value;
+        const confirmPass = document.getElementById('confirm_password').value;
+
+        if (pass !== confirmPass) {
+            msg.textContent = 'Passwords do not match.';
+            msg.style.color = 'red';
+            msg.style.display = 'block';
+            return;
+        }
+
+        const formData = new FormData(this);
+        try {
+            const response = await fetch('/user/signup', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                msg.textContent = 'Signup Successful! Redirecting to Login...';
+                msg.style.color = 'green';
+                msg.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'UserLogin.html';
+                }, 2000);
+            } else {
+                msg.textContent = data.message || 'Signup failed.';
+                msg.style.color = 'red';
+                msg.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            msg.textContent = 'An error occurred. Please try again.';
+            msg.style.color = 'red';
+            msg.style.display = 'block';
+        }
+    });
+</script>
 </body>
 </html>
 
