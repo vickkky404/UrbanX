@@ -63,11 +63,51 @@ with app.app_context():
 def home():
     return render_template('index.html')
 
+@app.route('/index.html')
+def index_redirect():
+    return render_template('index.html')
+
+@app.route('/about.html')
+def about():
+    return render_template('about.html')
+
+@app.route('/exploreOurServices.html')
+def services():
+    return render_template('exploreOurServices.html')
+
+@app.route('/contact.html', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        # logic to handle contact form submission
+        return render_template('contact.html') # Or redirect to a thank you page
+    return render_template('contact.html')
+
 @app.route('/app.html')
 def urban_app():
     return render_template('app.html')
 
-# Route handlers for login/signup forms
+# Auth Pages Routes
+@app.route('/Login/AdminLogin.html')
+def admin_login_page():
+    return render_template('Login/AdminLogin.html')
+
+@app.route('/Login/CaptainLogin.html')
+def captain_login_page():
+    return render_template('Login/CaptainLogin.html')
+
+@app.route('/Login/CaptainSignup.html')
+def captain_signup_page():
+    return render_template('Login/CaptainSignup.html')
+
+@app.route('/Login/UserLogin.html')
+def user_login_page():
+    # Assuming UserLogin.html exists or will exist in the same structure
+    try:
+        return render_template('Login/UserLogin.html')
+    except:
+        return "User Login Page Under Construction", 404
+
+# Route handlers for login/signup API logic
 @app.route('/captain/login', methods=['POST'])
 def captain_login():
     data = request.get_json(silent=True) or request.form
