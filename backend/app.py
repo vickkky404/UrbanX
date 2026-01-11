@@ -272,12 +272,23 @@ def geocode_location():
 
     # Use Nominatim OpenStreetMap API
     url = "https://nominatim.openstreetmap.org/search"
-    params = {
-        "q": query,
-        "format": "json",
-        "limit": 5,
-        "addressdetails": 1
-    }
+    if 'lat' in request.args and 'lon' in request.args:
+        # Reverse Geocoding
+        url = "https://nominatim.openstreetmap.org/reverse"
+        params = {
+            "lat": request.args.get('lat'),
+            "lon": request.args.get('lon'),
+            "format": "json"
+        }
+    else:
+        # Forward Geocoding
+        params = {
+            "q": query,
+            "format": "json",
+            "limit": 5,
+            "addressdetails": 1
+        }
+
     headers = {
         "User-Agent": "UrbanX-App/1.0"
     }

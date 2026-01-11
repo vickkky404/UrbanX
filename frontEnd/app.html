@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .app-container {
             display: flex;
@@ -64,63 +66,159 @@
             backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            width: 320px;
-            z-index: 1000; /* Ensure it's above the map */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            width: 340px;
+            z-index: 1000;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
         }
         .booking-panel h3 {
             margin-top: 0;
             margin-bottom: 20px;
             color: #1e293b;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .input-group {
             margin-bottom: 15px;
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            z-index: 10;
         }
         .input-group input, .input-group select {
             width: 100%;
-            padding: 10px;
+            padding: 12px 12px 12px 40px; /* Space for icon */
             border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            border-radius: 8px;
             box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .input-group select {
-            background-color: white;
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
         }
-        .ride-btn {
-            width: 100%;
-            padding: 12px;
-            background: #0f172a;
-            color: white;
+        .location-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
             border: none;
-            border-radius: 6px;
-            font-weight: bold;
+            color: #38bdf8;
             cursor: pointer;
+            padding: 5px;
+            font-size: 16px;
+            transition: color 0.3s;
         }
-        .ride-btn:hover {
-            background: #38bdf8;
+        .location-btn:hover {
+            color: #0ea5e9;
+        }
+
+        .ride-info {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none; /* Hidden by default */
+            border: 1px solid #e2e8f0;
+        }
+        .ride-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #475569;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ride-info strong {
             color: #0f172a;
         }
-        .search-results {
+
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Success Overlay Styles */
+        .success-overlay {
             display: none;
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-height: 200px;
-            overflow-y: auto;
-            background: white;
-            border: 1px solid #ccc;
-            z-index: 1001;
-            border-radius: 0 0 6px 6px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(5px);
         }
-        .search-results div {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse-green 2s infinite;
         }
-        .search-results div:hover {
-            background-color: #f0f9ff;
+
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 20px rgba(34, 197, 94, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        .success-content h2 {
+            color: #0f172a;
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .success-content p {
+            color: #64748b;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0);}
+            40% { color: #64748b; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0);}
+            60% { text-shadow: .25em 0 0 #64748b, .5em 0 0 rgba(0,0,0,0);}
+            80%, 100% { text-shadow: .25em 0 0 #64748b, .5em 0 0 #64748b;}
         }
     </style>
 </head>
@@ -149,27 +247,49 @@
             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
             <div class="booking-panel">
-                <h3>Where to?</h3>
+                <h3><i class="fas fa-route" style="color: #38bdf8;"></i> Where to?</h3>
                 <form id="bookingForm" autocomplete="off">
-                    <div class="input-group" style="position: relative;">
-                        <input type="text" id="pickup" name="pickup" placeholder="Pickup Location (e.g. Central Park)" required onkeyup="searchLocation('pickup')">
-                        <div id="pickup-results" class="search-results" style="display:none; position:absolute; width:100%; max-height:200px; overflow-y:auto; background:white; border:1px solid #ccc; z-index:1001; border-radius:0 0 6px 6px;"></div>
-                    </div>
-                    <div class="input-group" style="position: relative;">
-                        <input type="text" id="dropoff" name="dropoff" placeholder="Dropoff Location (e.g. Times Square)" required onkeyup="searchLocation('dropoff')">
-                        <div id="dropoff-results" class="search-results" style="display:none; position:absolute; width:100%; max-height:200px; overflow-y:auto; background:white; border:1px solid #ccc; z-index:1001; border-radius:0 0 6px 6px;"></div>
+                    <div class="input-group">
+                        <i class="fas fa-location-dot" style="color: #22c55e;"></i>
+                        <input type="text" id="pickup" name="pickup" placeholder="Pickup Location" required onkeyup="searchLocation('pickup')" data-lat="" data-lon="">
+                        <button type="button" class="location-btn" onclick="useCurrentLocation()" title="Use Current Location">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                        <div id="pickup-results" class="search-results" style="display:none; position:absolute; width:100%; top: 100%; left:0; max-height:200px; overflow-y:auto; background:white; border:1px solid #ccc; z-index:1001; border-radius:0 0 6px 6px;"></div>
                     </div>
                     <div class="input-group">
-                        <select id="vehicle_type" name="vehicle_type">
-                            <option value="Cycle">Cycle (Eco-Friendly)</option>
-                            <option value="Bike">Bike</option>
-                            <option value="Auto">Auto</option>
-                            <option value="Cab" selected>Cab</option>
+                        <i class="fas fa-map-pin" style="color: #ef4444;"></i>
+                        <input type="text" id="dropoff" name="dropoff" placeholder="Dropoff Location" required onkeyup="searchLocation('dropoff')" data-lat="" data-lon="">
+                        <div id="dropoff-results" class="search-results" style="display:none; position:absolute; width:100%; top: 100%; left:0; max-height:200px; overflow-y:auto; background:white; border:1px solid #ccc; z-index:1001; border-radius:0 0 6px 6px;"></div>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-car-side"></i>
+                        <select id="vehicle_type" name="vehicle_type" onchange="calculatePrice()">
+                            <option value="Cycle" data-rate="5">Cycle (Eco-Friendly)</option>
+                            <option value="Bike" data-rate="10">Bike</option>
+                            <option value="Auto" data-rate="15">Auto</option>
+                            <option value="Cab" data-rate="25" selected>Cab</option>
                         </select>
                     </div>
+
+                    <div id="ride-details" class="ride-info">
+                        <p>Distance: <strong id="est-dist">0 km</strong></p>
+                        <p>Time: <strong id="est-time">0 mins</strong></p>
+                        <p>Est. Price: <strong id="est-price">₹0</strong></p>
+                    </div>
+
                     <button type="submit" class="ride-btn">Request Ride</button>
                 </form>
                 <div id="booking-msg" style="margin-top: 10px; font-size: 14px;"></div>
+            </div>
+
+            <!-- Success Animation Overlay -->
+            <div id="success-overlay" class="success-overlay">
+                <div class="success-icon">✓</div>
+                <div class="success-content">
+                    <h2>Ride Requested!</h2>
+                    <p>Searching for nearby captains<span class="loading-dots"></span></p>
+                </div>
             </div>
         </div>
 
@@ -221,6 +341,140 @@
     }
 
     let searchTimeout;
+    let routeLine;
+    let driverMarkers = [];
+
+    // Haversine Distance Calculation
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat2-lat1);
+        var dLon = deg2rad(lon2-lon1);
+        var a =
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = R * c; // Distance in km
+        return d;
+    }
+
+    function deg2rad(deg) {
+        return deg * (Math.PI/180)
+    }
+
+    function calculatePrice() {
+        const pickupInput = document.getElementById('pickup');
+        const dropoffInput = document.getElementById('dropoff');
+        const detailsDiv = document.getElementById('ride-details');
+
+        const lat1 = parseFloat(pickupInput.dataset.lat);
+        const lon1 = parseFloat(pickupInput.dataset.lon);
+        const lat2 = parseFloat(dropoffInput.dataset.lat);
+        const lon2 = parseFloat(dropoffInput.dataset.lon);
+
+        if (!isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)) {
+            const dist = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
+            // Add 20% for road vs straight line
+            const roadDist = dist * 1.2;
+
+            // Calculate Price
+            const vehicleSelect = document.getElementById('vehicle_type');
+            const rate = parseFloat(vehicleSelect.options[vehicleSelect.selectedIndex].dataset.rate);
+            const price = Math.round(Math.max(20, roadDist * rate)); // Min fare 20
+
+            // Est Time (avg speed 25km/h city)
+            const time = Math.round((roadDist / 25) * 60);
+
+            document.getElementById('est-dist').textContent = roadDist.toFixed(1) + ' km';
+            document.getElementById('est-time').textContent = time + ' mins';
+            document.getElementById('est-price').textContent = '₹' + price;
+
+            detailsDiv.style.display = 'block';
+
+            // Draw Route Line
+            if (window.map) {
+                if (routeLine) window.map.removeLayer(routeLine);
+                routeLine = L.polyline([[lat1, lon1], [lat2, lon2]], {color: '#38bdf8', weight: 5, opacity: 0.7, dashArray: '10, 10'}).addTo(window.map);
+                window.map.fitBounds(routeLine.getBounds(), {padding: [50, 50]});
+            }
+        } else {
+            detailsDiv.style.display = 'none';
+            if (routeLine && window.map) window.map.removeLayer(routeLine);
+        }
+    }
+
+    async function useCurrentLocation() {
+        const btn = document.querySelector('.location-btn');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                // Reverse Geocode
+                try {
+                    const response = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
+                    const data = await response.json();
+
+                    const input = document.getElementById('pickup');
+                    input.dataset.lat = lat;
+                    input.dataset.lon = lon;
+
+                    if (data.display_name) {
+                        input.value = data.display_name.split(',')[0]; // Simple name
+                    } else {
+                        input.value = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+                    }
+
+                    // Center map
+                    if (window.map) {
+                        window.map.setView([lat, lon], 15);
+                        L.marker([lat, lon]).addTo(window.map).bindPopup('Your Location').openPopup();
+                        // Add simulated drivers
+                        addSimulatedDrivers(lat, lon);
+                    }
+
+                    calculatePrice();
+                    btn.innerHTML = originalHtml;
+                } catch (e) {
+                    console.error(e);
+                    alert('Could not get address');
+                    btn.innerHTML = originalHtml;
+                }
+            }, () => {
+                alert('Geolocation failed or denied');
+                btn.innerHTML = originalHtml;
+            });
+        } else {
+            alert('Geolocation is not supported by your browser');
+            btn.innerHTML = originalHtml;
+        }
+    }
+
+    function addSimulatedDrivers(lat, lon) {
+        if (!window.map) return;
+
+        // Remove existing
+        driverMarkers.forEach(m => window.map.removeLayer(m));
+        driverMarkers = [];
+
+        const driverIcon = L.divIcon({
+            html: '<i class="fas fa-car" style="color: #0f172a; font-size: 20px; text-shadow: 0 0 5px white;"></i>',
+            className: 'driver-icon',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        // Add 3 drivers nearby
+        for (let i = 0; i < 3; i++) {
+            const dLat = lat + (Math.random() - 0.5) * 0.01;
+            const dLon = lon + (Math.random() - 0.5) * 0.01;
+            const marker = L.marker([dLat, dLon], {icon: driverIcon}).addTo(window.map);
+            driverMarkers.push(marker);
+        }
+    }
 
     function searchLocation(type) {
         clearTimeout(searchTimeout);
@@ -248,6 +502,8 @@
                         div.textContent = place.display_name;
                         div.onclick = () => {
                             input.value = place.display_name; // Simplified name
+                            input.dataset.lat = place.lat; // Store coords
+                            input.dataset.lon = place.lon;
                             resultsDiv.style.display = 'none';
 
                             // Optional: Center map on location
@@ -258,7 +514,12 @@
                                 L.marker([lat, lon]).addTo(window.map)
                                     .bindPopup(type.charAt(0).toUpperCase() + type.slice(1) + ': ' + place.display_name.split(',')[0])
                                     .openPopup();
+
+                                if (type === 'pickup') {
+                                    addSimulatedDrivers(lat, lon);
+                                }
                             }
+                            calculatePrice(); // Recalc on selection
                         };
                         div.onmouseover = () => div.style.backgroundColor = '#f0f9ff';
                         div.onmouseout = () => div.style.backgroundColor = 'white';
@@ -351,11 +612,21 @@
             const data = await response.json();
 
             if (response.ok) {
-                msg.textContent = 'Ride Requested Successfully! Captains are being notified.';
-                msg.style.color = 'green';
+                // msg.textContent = 'Ride Requested Successfully! Captains are being notified.';
+                // msg.style.color = 'green';
+
+                // Show Success Overlay
+                const overlay = document.getElementById('success-overlay');
+                overlay.style.display = 'flex';
+
                 this.reset();
-                // Optionally switch to my rides
-                // setTimeout(() => { showSection('my-rides', null); loadRides(); }, 1500);
+
+                // Transition to My Rides after 3 seconds
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    showSection('my-rides', null);
+                    loadRides();
+                }, 3000);
             } else {
                 msg.textContent = data.message || 'Error requesting ride.';
                 msg.style.color = 'red';
