@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UrbanX - Captain Signup</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header>
+    <h1>UrbanX Captain</h1>
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="CaptainLogin.html">Login</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div class="login-container">
+        <h2>Become a Captain</h2>
+        <form action="/captain/signup" method="post">
+            <div class="form-group">
+                <label for="fullname">Full Name:</label>
+                <input type="text" id="fullname" name="fullname" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+             <div class="form-group">
+                <label for="vehicle_type">Vehicle Type:</label>
+                <select id="vehicle_type" name="vehicle_type">
+                    <option value="bike">Bike</option>
+                    <option value="auto">Auto</option>
+                    <option value="cab">Cab</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-submit">Register</button>
+
+            <p class="switch-auth">
+                Already a Captain? <a href="CaptainLogin.html">Login here</a>
+            </p>
+        </form>
+    </div>
+</main>
+<footer>
+    <p>&copy; 2026 UrbanX. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
