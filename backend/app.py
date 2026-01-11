@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import requests
 
 # creates the instance for the flask  class
 # Configured to serve templates and static files (css/images) from the frontEnd directory
@@ -55,6 +56,7 @@ class Ride(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pickup = db.Column(db.String(255), nullable=False)
     dropoff = db.Column(db.String(255), nullable=False)
+    vehicle_type = db.Column(db.String(50), default='Cab', nullable=False)
     status = db.Column(db.String(50), default='requested', nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
@@ -218,6 +220,7 @@ def list_rides():
                 "id": r.id,
                 "pickup": r.pickup,
                 "dropoff": r.dropoff,
+                "vehicle_type": r.vehicle_type,
                 "status": r.status,
                 "created_at": r.created_at.isoformat(),
                 "updated_at": r.updated_at.isoformat(),
@@ -230,35 +233,16 @@ def create_ride():
     data = request.get_json(silent=True) or request.form
     pickup = data.get('pickup')
     dropoff = data.get('dropoff')
+    vehicle_type = data.get('vehicle_type') or 'Cab'
     user_id = data.get('user_id') # Optional for now, but good to have
 
     if not pickup or not dropoff:
         return jsonify({"status": "error", "message": "pickup and dropoff are required"}), 400
 
-    ride = Ride(pickup=pickup, dropoff=dropoff, user_id=user_id)
+    ride = Ride(pickup=pickup, dropoff=dropoff, vehicle_type=vehicle_type, user_id=user_id)
     db.session.add(ride)
     db.session.commit()
     return jsonify({"status": "ok", "ride_id": ride.id, "message": "Ride created"}), 201
-
-@app.route('/rides/<int:ride_id>/status', methods=['POST'])
-def update_ride_status(ride_id):
-    data = request.get_json(silent=True) or request.form
-    status = data.get('status')
-    captain_id = data.get('captain_id')
-
-    if not status:
-         return jsonify({"status": "error", "message": "status is required"}), 400
-
-    ride = Ride.query.get(ride_id)
-    if not ride:
-        return jsonify({"status": "error", "message": "Ride not found"}), 404
-
-    ride.status = status
-    if captain_id:
-        ride.captain_id = captain_id
-
-    db.session.commit()
-    return jsonify({"status": "ok", "message": "Ride updated", "status": ride.status}), 200
 
 @app.route('/rides/<int:ride_id>', methods=['GET'])
 def get_ride(ride_id):
@@ -271,6 +255,7 @@ def get_ride(ride_id):
             "id": ride.id,
             "pickup": ride.pickup,
             "dropoff": ride.dropoff,
+            "vehicle_type": ride.vehicle_type,
             "status": ride.status,
             "user_id": ride.user_id,
             "captain_id": ride.captain_id,
@@ -278,6 +263,33 @@ def get_ride(ride_id):
             "updated_at": ride.updated_at.isoformat()
         }
     }), 200
+
+@app.route('/api/geocode', methods=['GET'])
+def geocode_location():
+    query = request.args.get('q')
+    if not query:
+        return jsonify([])
+
+    # Use Nominatim OpenStreetMap API
+    url = "https://nominatim.openstreetmap.org/search"
+    params = {
+        "q": query,
+        "format": "json",
+        "limit": 5,
+        "addressdetails": 1
+    }
+    headers = {
+        "User-Agent": "UrbanX-App/1.0"
+    }
+
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        if response.status_code == 200:
+            return jsonify(response.json())
+        return jsonify([])
+    except Exception as e:
+        print(f"Geocoding error: {e}")
+        return jsonify([])
 
 #  ///////////////////
 # runs the applicaiton
