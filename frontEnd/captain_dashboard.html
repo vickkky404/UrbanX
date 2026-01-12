@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrbanX Captain Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            background: #1f2933;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1001;
+        }
+        .sidebar h2 {
+            color: #38bdf8;
+            margin-bottom: 20px;
+        }
+        .captain-profile {
+            background: #334155;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .captain-profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .captain-profile h3 {
+            margin: 0;
+            font-size: 18px;
+            color: white;
+        }
+        .captain-profile p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            flex: 1;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar ul li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+            gap: 10px;
+        }
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background: #374151;
+            color: white;
+        }
+
+        .map-area {
+            flex: 1;
+            position: relative;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .dashboard-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 350px;
+            pointer-events: none; /* Allow clicking map underneath */
+        }
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            pointer-events: auto;
+        }
+        .stats-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stats-info h4 {
+            margin: 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .stats-info .amount {
+            margin: 5px 0 0;
+            color: #0f172a;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .btn-cashout {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-cashout:hover {
+            background: #16a34a;
+        }
+
+        .status-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #38bdf8;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .ride-request-card h3 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        .ride-details {
+            margin: 15px 0;
+        }
+        .ride-location {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .ride-location i {
+            margin-top: 3px;
+        }
+        .pickup i { color: #22c55e; }
+        .dropoff i { color: #ef4444; }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-accept, .btn-reject {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-accept {
+            background: #38bdf8;
+            color: white;
+        }
+        .btn-reject {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column-reverse;
+            }
+            .sidebar {
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0;
+                justify-content: space-around;
+                align-items: center;
+            }
+            .sidebar h2, .captain-profile, .sidebar .text {
+                display: none;
+            }
+            .sidebar ul {
+                display: flex;
+                width: 100%;
+                justify-content: space-around;
+                margin: 0;
+            }
+            .sidebar ul li { margin: 0; }
+            .sidebar ul li a {
+                flex-direction: column;
+                font-size: 10px;
+                gap: 5px;
+                padding: 8px;
+            }
+            .dashboard-overlay {
+                width: calc(100% - 40px);
+                top: 10px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h2>UrbanX Captain</h2>
+
+            <div class="captain-profile">
+                <!-- <img src="https://via.placeholder.com/50" alt="Captain"> -->
+                <h3 id="captain-name">Loading...</h3>
+                <p id="vehicle-info">Vehicle Type: Cab</p>
+                <p style="font-size: 12px; margin-top: 5px; opacity: 0.7;">Age: 28</p>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> <span class="text">Dashboard</span></a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> <span class="text">Rides</span></a></li>
+                    <li><a href="#"><i class="fas fa-wallet"></i> <span class="text">Earnings</span></a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> <span class="text">Profile</span></a></li>
+                    <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span class="text">Logout</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="map-area">
+            <div id="map"></div>
+
+            <div class="dashboard-overlay">
+                <!-- Status Card -->
+                <div class="dashboard-card">
+                    <div class="status-toggle">
+                        <span style="font-weight: 600; color: #1e293b;">You are detailed as: <span id="status-text" style="color: #22c55e;">Online</span></span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked onchange="toggleStatus(this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Earnings Card -->
+                <div class="dashboard-card stats-card">
+                    <div class="stats-info">
+                        <h4>Total Income</h4>
+                        <p class="amount">₹ <span id="total-income">2,450.00</span></p>
+                    </div>
+                    <button class="btn-cashout" onclick="alert('Cashout feature coming soon!')">Cashout</button>
+                </div>
+
+                <!-- Upcoming Ride Request (Simulation) -->
+                <div class="dashboard-card ride-request-card" id="upcoming-ride">
+                    <h3>Upcoming Ride</h3>
+                    <div class="ride-details">
+                        <div class="ride-location pickup">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Central Mall, Gandhi Road</span>
+                        </div>
+                        <div class="ride-location dropoff">
+                            <i class="fas fa-location-arrow"></i>
+                            <span>Tech Park, Sector 5</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 14px; color: #64748b; margin-top: 10px;">
+                            <span><i class="fas fa-clock"></i> 2 mins away</span>
+                            <span style="color: #0f172a; font-weight: 600;">₹ 145.00</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-reject" onclick="rejectRide()">Pass</button>
+                        <button class="btn-accept" onclick="acceptRide()">Accept Ride</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // Check Auth
+        // const userType = localStorage.getItem('userType');
+        // if (userType !== 'captain') {
+        //     window.location.href = 'Login/CaptainLogin.html';
+        // }
+
+        // Initialize Map
+        const map = L.map('map').setView([12.9716, 77.5946], 13); // Default to Bangalore
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }).addTo(map);
+
+        // Get Current Location
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(position => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                // Update map view and marker (simulation)
+                // map.setView([lat, lng], 15);
+            }, error => {
+                console.error("Location access denied or error", error);
+            });
+        }
+
+        // --- Mock Data Loading ---
+        // In a real app, fetch this from backend
+        // document.getElementById('captain-name').textContent = "Rajesh Kumar"; // Example
+
+        function toggleStatus(checkbox) {
+            const statusText = document.getElementById('status-text');
+            if (checkbox.checked) {
+                statusText.textContent = "Online";
+                statusText.style.color = "#22c55e"; // Green
+                document.getElementById('upcoming-ride').style.display = 'block';
+            } else {
+                statusText.textContent = "Offline";
+                statusText.style.color = "#94a3b8"; // Gray
+                document.getElementById('upcoming-ride').style.display = 'none';
+            }
+        }
+
+        function acceptRide() {
+            alert("You accepted the ride! Navigation starting...");
+            // Logic to update ride status to 'accepted'
+        }
+
+        function rejectRide() {
+            document.getElementById('upcoming-ride').style.display = 'none';
+            setTimeout(() => {
+                // Show another ride after delay
+                document.getElementById('upcoming-ride').style.display = 'block';
+            }, 5000);
+        }
+
+        function logout() {
+            localStorage.removeItem('userType');
+            window.location.href = 'Login/CaptainLogin.html';
+        }
+
+        // Fetch Captain Details (if available)
+        // Here we can use localstorage or an API call if user logged in
+        const captainData = localStorage.getItem('urbx_captain');
+        if (captainData) {
+            const captain = JSON.parse(captainData);
+            document.getElementById('captain-name').textContent = captain.name;
+            document.getElementById('vehicle-info').textContent = 'Vehicle Type: ' + (captain.vehicle_type || 'Cab');
+        } else {
+             // Redirect if not logged in?
+             // window.location.href = 'Login/CaptainLogin.html';
+        }
+    </script>
+</body>
+</html>
+
