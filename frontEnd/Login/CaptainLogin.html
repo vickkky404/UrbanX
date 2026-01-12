@@ -22,10 +22,10 @@
 <main>
     <div class="login-container captain-login">
         <h2>Captain Login</h2>
-        <form action="/captain/login" method="post">
+        <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username/Email:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
@@ -33,11 +33,51 @@
             </div>
             <button type="submit" class="btn-submit">Login</button>
 
+            <div id="message" style="margin-top: 10px; color: red;"></div>
+
             <div class="login-links">
                 <p>Want to join us? <a href="CaptainSignup.html">Sign Up as Captain</a></p>
                 <p>Not a Captain? <a href="UserLogin.html">User Login</a></p>
             </div>
         </form>
+    </div>
+</main>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/captain/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+
+            if (response.ok) {
+                messageDiv.style.color = 'green';
+                messageDiv.textContent = 'Login successful! Redirecting...';
+                // Store token or user info if needed
+                localStorage.setItem('userType', 'captain');
+                setTimeout(() => {
+                    window.location.href = '../app.html';
+                }, 1000);
+            } else {
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = result.message || 'Login failed';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').textContent = 'An error occurred. Please try again.';
+        }
+    });
+</script>
     </div>
 </main>
 <footer>
