@@ -177,10 +177,18 @@ def captain_login():
     data = request.get_json(silent=True) or request.form
     email = (data.get('email') or '').strip()
     password = (data.get('password') or '').strip()
+    vehicle_type = (data.get('vehicle_type') or '').strip()
+
     if not email or not password:
         return jsonify({"status": "error", "message": "Email and password are required"}), 400
+
     captain = Captain.query.filter_by(email=email).first()
+
     if captain and captain.check_password(password):
+        # Verify vehicle type if provided
+        if vehicle_type and captain.vehicle_type and vehicle_type.lower() != captain.vehicle_type.lower():
+             return jsonify({"status": "error", "message": f"Invalid vehicle type. You are registered as a {captain.vehicle_type} captain."}), 401
+
         return jsonify({
             "status": "ok",
             "message": "Captain authenticated",
