@@ -105,6 +105,10 @@ def contact():
 def urban_app():
     return render_template('app.html')
 
+@app.route('/captain_dashboard.html')
+def captain_dashboard():
+    return render_template('captain_dashboard.html')
+
 # Auth Pages Routes
 @app.route('/Login/AdminLogin.html')
 def admin_login_page():
@@ -177,7 +181,16 @@ def captain_login():
         return jsonify({"status": "error", "message": "Email and password are required"}), 400
     captain = Captain.query.filter_by(email=email).first()
     if captain and captain.check_password(password):
-        return jsonify({"status": "ok", "message": "Captain authenticated"}), 200
+        return jsonify({
+            "status": "ok",
+            "message": "Captain authenticated",
+            "captain": {
+                "id": captain.id,
+                "name": captain.name,
+                "vehicle_type": captain.vehicle_type,
+                "email": captain.email
+            }
+        }), 200
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
 
 @app.route('/captain/signup', methods=['POST'])
