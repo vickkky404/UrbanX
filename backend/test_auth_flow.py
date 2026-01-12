@@ -1,65 +1,75 @@
 import requests
 import json
+import random
+import time
 
 base_url = "http://127.0.0.1:5000"
 
 def test_captain_flow():
-    print("Testing Captain Flow...")
+    print("--- Starting Captain Auth Flow Test ---")
+    rand_id = random.randint(1000, 9999)
+    email = f"capt_{rand_id}@urbanx.com"
 
     # 1. Signup
     signup_data = {
-        "name": "Test Captain",
-        "email": "captain_test_vehicle@urbanx.com",
+        "name": f"Captain {rand_id}",
+        "email": email,
         "password": "password123",
         "vehicle_type": "bike",
         "age": 30
     }
 
-    # Try signup (might already exist, so we handle that)
+    print(f"1. Attempting Signup for {email}...")
     try:
         r = requests.post(f"{base_url}/captain/signup", json=signup_data)
-        print(f"Signup Status: {r.status_code}, Response: {r.json()}")
+        if r.status_code == 201:
+             print("   [PASS] Signup Successful")
+        else:
+             print(f"   [FAIL] Signup Failed: {r.status_code} - {r.text}")
+             return
     except Exception as e:
-        print(f"Signup failed to connect: {e}")
+        print(f"   [FAIL] Exception during signup: {e}")
         return
 
     # 2. Login with CORRECT vehicle
+    print("2. Attempting Login with CORRECT vehicle type...")
     login_correct = {
-        "email": "captain_test_vehicle@urbanx.com",
+        "email": email,
         "password": "password123",
         "vehicle_type": "bike"
     }
     r = requests.post(f"{base_url}/captain/login", json=login_correct)
-    print(f"Login (Correct Vehicle) Status: {r.status_code}")
     if r.status_code == 200:
         data = r.json()
-        print(f"Login Success. Response Data: {data}")
-        if 'captain' in data:
-            cap = data['captain']
-            if cap.get('age') == 30:
-                print("PASS: Age is correctly returned.")
-            else:
-                print(f"FAIL: Age mismatch. Got {cap.get('age')}")
+        print("   [PASS] Login Successful")
 
-            if cap.get('total_earnings') == 0.0:
-                 print("PASS: Earnings initialized correctly.")
-            else:
-                 print(f"FAIL: Earnings mismatch. Got {cap.get('total_earnings')}")
+        cap = data.get('captain', {})
+        if cap.get('age') == 30:
+            print(f"   [PASS] Age is {cap.get('age')}")
+        else:
+            print(f"   [FAIL] Age mismatch: {cap.get('age')}")
+
+        if cap.get('total_earnings') == 0.0:
+             print(f"   [PASS] Earnings is {cap.get('total_earnings')}")
+        else:
+             print(f"   [FAIL] Earnings mismatch: {cap.get('total_earnings')}")
     else:
-        print(f"FAIL: Correct login failed. {r.text}")
+        print(f"   [FAIL] Login Failed: {r.status_code} - {r.text}")
 
     # 3. Login with WRONG vehicle
+    print("3. Attempting Login with WRONG vehicle type...")
     login_wrong = {
-        "email": "captain_test_vehicle@urbanx.com",
+        "email": email,
         "password": "password123",
-        "vehicle_type": "car" # Mismatch
+        "vehicle_type": "cab" # Mismatch
     }
     r = requests.post(f"{base_url}/captain/login", json=login_wrong)
-    print(f"Login (Wrong Vehicle) Status: {r.status_code}")
     if r.status_code == 401:
-        print(f"PASS: Wrong vehicle rejected. Message: {r.json().get('message')}")
+        print("   [PASS] Login Rejected correctly")
     else:
-        print(f"FAIL: Wrong vehicle NOT rejected. Status: {r.status_code}")
+        print(f"   [FAIL] Login should have failed but got: {r.status_code}")
+
+    print("--- Test Complete ---")
 
 if __name__ == "__main__":
     test_captain_flow()
