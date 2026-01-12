@@ -18,7 +18,7 @@
 <main>
     <div class="login-container">
         <h2>Become a Captain</h2>
-        <form action="/captain/signup" method="post">
+        <form id="signupForm">
             <div class="form-group">
                 <label for="fullname">Full Name:</label>
                 <input type="text" id="fullname" name="fullname" required>
@@ -41,10 +41,48 @@
             </div>
             <button type="submit" class="btn-submit">Register</button>
 
+            <div id="message" style="margin-top: 10px; color: red;"></div>
+
             <p class="switch-auth">
                 Already a Captain? <a href="CaptainLogin.html">Login here</a>
             </p>
         </form>
+    </div>
+</main>
+<script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/captain/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            const messageDiv = document.getElementById('message');
+
+            if (response.ok) {
+                messageDiv.style.color = 'green';
+                messageDiv.textContent = 'Registration successful! Redirecting to login...';
+                setTimeout(() => {
+                    window.location.href = 'CaptainLogin.html';
+                }, 1500);
+            } else {
+                messageDiv.style.color = 'red';
+                messageDiv.textContent = result.message || 'Registration failed';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('message').textContent = 'An error occurred. Please try again.';
+        }
+    });
+</script>
     </div>
 </main>
 <footer>
