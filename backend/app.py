@@ -19,6 +19,8 @@ class Captain(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     vehicle_type = db.Column(db.String(50), nullable=True)
+    age = db.Column(db.Integer, nullable=True)  # New field for captain's age
+    total_earnings = db.Column(db.Float, default=0.0)  # New field for captain's total earnings
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
@@ -195,8 +197,10 @@ def captain_login():
             "captain": {
                 "id": captain.id,
                 "name": captain.name,
+                "age": captain.age,
                 "vehicle_type": captain.vehicle_type,
-                "email": captain.email
+                "email": captain.email,
+                "total_earnings": captain.total_earnings
             }
         }), 200
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
@@ -208,13 +212,14 @@ def captain_signup():
     email = (data.get('email') or '').strip()
     password = (data.get('password') or '').strip()
     vehicle_type = (data.get('vehicle_type') or '').strip()
+    age = data.get('age')
 
     if not name or not email or not password:
         return jsonify({"status": "error", "message": "Name, email, and password are required"}), 400
     if Captain.query.filter_by(email=email).first():
         return jsonify({"status": "error", "message": "Email already registered"}), 400
 
-    captain = Captain(name=name, email=email, vehicle_type=vehicle_type)
+    captain = Captain(name=name, email=email, vehicle_type=vehicle_type, age=age)
     captain.set_password(password)
     db.session.add(captain)
     db.session.commit()
