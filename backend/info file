@@ -1,2 +1,5 @@
 backend --> flask
 database --> SQLite , postgres
+
+
+To run the flask app , use the following command: cd backend; python app.py
