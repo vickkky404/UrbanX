@@ -65,8 +65,10 @@
                 messageDiv.textContent = 'Login successful! Redirecting...';
                 // Store token or user info if needed
                 localStorage.setItem('userType', 'captain');
+                localStorage.setItem('urbx_captain', JSON.stringify(result.captain));
+
                 setTimeout(() => {
-                    window.location.href = '../app.html';
+                    window.location.href = '../captain_dashboard.html';
                 }, 1000);
             } else {
                 messageDiv.style.color = 'red';
