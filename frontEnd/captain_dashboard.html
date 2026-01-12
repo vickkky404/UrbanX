@@ -398,7 +398,9 @@
         if (captainData) {
             const captain = JSON.parse(captainData);
             document.getElementById('captain-name').textContent = captain.name;
+            document.getElementById('captain-age').textContent = 'Age: ' + (captain.age || '--');
             document.getElementById('vehicle-info').textContent = 'Vehicle Type: ' + (captain.vehicle_type || 'Cab');
+            document.getElementById('total-income').textContent = (captain.total_earnings || 0).toFixed(2);
         } else {
              // Redirect if not logged in?
              // window.location.href = 'Login/CaptainLogin.html';
