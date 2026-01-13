@@ -820,6 +820,16 @@ footer {
     font-family: inherit;
     font-size: 16px;
     box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.login-container input[type="text"]:focus,
+.login-container input[type="email"]:focus,
+.login-container input[type="password"]:focus,
+.login-container select:focus {
+    border-color: #38bdf8;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
 .brand-select {
