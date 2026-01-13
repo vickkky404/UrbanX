@@ -165,6 +165,54 @@ main {
     width: 100%;
 }
 
+/* Success Button (e.g. Accept Ride) */
+.btn-success, .btn-accept {
+    background-color: #10b981;
+    color: #ffffff;
+}
+
+.btn-success:hover, .btn-accept:hover {
+    background-color: #059669;
+    box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Danger/Reject Button */
+.btn-danger, .btn-reject {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.btn-reject.btn-ghost {
+    background-color: #f1f5f9;
+    color: #64748b;
+    box-shadow: none;
+}
+
+.btn-danger:hover, .btn-reject:hover {
+    background-color: #dc2626;
+    box-shadow: 0 8px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-reject.btn-ghost:hover {
+    background-color: #e2e8f0;
+    color: #475569;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Cashout Button */
+.btn-cashout {
+    background-color: #10b981;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.btn-cashout:hover {
+    background-color: #059669;
+}
+
 .features {
     margin-top: 80px;
     display: grid;
