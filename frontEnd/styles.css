@@ -115,26 +115,75 @@ main {
     padding: 60px 8%;
     box-sizing: border-box;
 }
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .hero {
-    background: linear-gradient(rgba(17,24,39,0.8), rgba(17,24,39,0.8)),
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.85)),
                 url('https://images.unsplash.com/1600585154340-be6161a56a0c') center/cover no-repeat;
     color: #ffffff;
-    padding: 100px 60px;
-    border-radius: 16px;
+    padding: 120px 60px;
+    border-radius: 24px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 60px;
 }
 
 .hero h2 {
-    font-size: 42px;
-    margin-bottom: 15px;
-    letter-spacing: 1px;
+    font-size: 48px;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    animation: fadeInDown 0.8s ease-out;
 }
 
 .hero p {
-    font-size: 18px;
-    margin-bottom: 30px;
-    color: #d1d5db;
+    font-size: 20px;
+    margin-bottom: 40px;
+    color: #e2e8f0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
+}
+
+.hero .btn {
+    animation: fadeInUp 0.8s ease-out 0.4s backwards;
+}
+
+/* Footer Styles */
+footer {
+    background: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 60px 20px;
+    margin-top: 80px;
+    border-top: 1px solid #1e293b;
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+footer a {
+    color: #38bdf8;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+footer a:hover {
+    color: #7dd3fc;
 }
 
 /* --- Unified Button Styles --- */
