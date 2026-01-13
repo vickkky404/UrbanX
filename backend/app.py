@@ -368,6 +368,33 @@ def update_profile(user_id):
     db.session.commit()
     return jsonify({"status": "ok", "message": "Profile updated", "user": {"id": user.id, "fullname": user.fullname, "email": user.email}}), 200
 
+# Endpoint to get fare estimates for different vehicle types
+@app.route('/api/fare/estimate', methods=['POST'])
+def estimate_fare():
+    data = request.get_json(silent=True) or request.form
+    # In a real app, distance would be calculated from pickup/dropoff coords
+    # Here we accept an estimated distance or default to 5km
+    distance_km = float(data.get('distance_km', 5.0))
+
+    # Pricing configuration (per km)
+    rates = {
+        'Cab': 15.0,
+        'Auto': 10.0,
+        'Moto': 7.0,
+        'Cycle': 8.0  # Set to 8 Rupees as per request
+    }
+
+    estimates = {}
+    for v_type, rate in rates.items():
+        estimates[v_type] = round(rate * distance_km, 2)
+
+    return jsonify({
+        "status": "ok",
+        "estimates": estimates,
+        "currency": "₹",
+        "distance_km": distance_km
+    })
+
 #  ///////////////////
 # runs the applicaiton
 # defualt port for flask is 5000
