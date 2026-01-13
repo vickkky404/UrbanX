@@ -973,16 +973,19 @@ footer {
     padding: 12px;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
-    font-family: inherit;
+    font-family: "Inter", inherit;
     font-size: 16px;
     box-sizing: border-box;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background: #f8fafc;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
     border-color: #38bdf8;
     outline: none;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    background: #fff;
 }
 
 /* Old .btn-submit removed - handled by unified styles */
