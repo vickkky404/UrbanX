@@ -472,21 +472,7 @@ footer {
     opacity: 0.95;
     color: #f0f9ff;
 }
-.cta-banner .btn {
-    background: white;
-    color: #0ea5e9;
-    padding: 12px 30px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-.cta-banner .btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-}
+/* Old .cta-banner .btn removed - handled by unified styles */
 
 /* About Us Page Styles */
 .about-hero {
