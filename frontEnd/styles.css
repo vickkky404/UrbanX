@@ -446,12 +446,21 @@ footer a:hover {
 
 .service-icon {
     font-size: 48px;
-    margin-bottom: 20px;
-    display: inline-block;
-    padding: 20px;
-    background: #f0f9ff;
+    margin-bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    color: #0284c7;
     border-radius: 50%;
     line-height: 1;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-icon {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .service-card h3 {
