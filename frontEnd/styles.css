@@ -340,33 +340,41 @@ footer a:hover {
 .features {
     margin-top: 80px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 35px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Widened slightly */
+    gap: 40px;
 }
 
 .feature {
     background: #ffffff;
-    padding: 35px;
-    border-radius: 16px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-    transition: 0.3s ease;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(241, 245, 249, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .feature:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: rgba(56, 189, 248, 0.5);
 }
 
 .feature h3 {
-    color: #0f172a;
-    margin-bottom: 10px;
-    font-size: 20px;
+    color: #1e293b;
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 700;
 }
 
 .feature p {
-    color: #475569;
+    color: #64748b;
     line-height: 1.6;
-    font-size: 15px;
+    font-size: 16px;
+    margin: 0;
 }
 
 /* Cleaned Generic Styles - body and header removed to use top definitions */
