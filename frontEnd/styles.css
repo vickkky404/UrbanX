@@ -887,23 +887,34 @@ footer {
 }
 
 .admin-login {
-    border-top: 5px solid #ef4444;
+    border-top: 3px solid #ef4444;
 }
 
 .admin-login h2 {
-    color: #dc2626;
-    letter-spacing: 0.5px;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.admin-login h2::after {
+    content: 'ADMIN ACCESS';
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #ef4444;
+    margin-top: 5px;
+    text-transform: uppercase;
 }
 
 .admin-login .btn-submit {
-    background: linear-gradient(to right, #ef4444, #dc2626);
-    box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.1), 0 2px 4px -1px rgba(239, 68, 68, 0.06);
+    background: #ef4444;
+    box-shadow: none;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .admin-login .btn-submit:hover {
-    background: linear-gradient(to right, #dc2626, #b91c1c);
-    box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2), 0 4px 6px -2px rgba(239, 68, 68, 0.1);
-    transform: translateY(-1px);
+    background: #dc2626;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 /* Mobile Responsive Styles */
