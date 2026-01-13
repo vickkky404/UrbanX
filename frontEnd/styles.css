@@ -100,22 +100,71 @@ main {
     color: #d1d5db;
 }
 
-.hero .btn {
-    display: inline-block;
-    background: #38bdf8;
-    color: #0f172a;
-    padding: 14px 36px;
-    border-radius: 30px;
-    text-decoration: none;
+/* --- Unified Button Styles --- */
+.btn, .btn-submit, .service-btn, .hero .btn, .cta-banner .btn, .ride-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    font-size: 16px;
     font-weight: 600;
-    transition: 0.3s ease;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Minimal shadow */
+    position: relative;
+    overflow: hidden;
+    line-height: 1.2;
 }
 
-.hero .btn:hover {
-    background: #0ea5e9;
+/* Primary Button Style (Dark/Slate) */
+.btn-primary, .btn-submit, .service-btn, .ride-btn {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+.btn-primary:hover, .btn-submit:hover, .service-btn:hover, .ride-btn:hover {
+    background-color: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:active, .btn-submit:active, .service-btn:active, .ride-btn:active {
+    transform: translateY(0);
+}
+
+/* Accent Button Style (Blue - e.g. used in Hero) */
+.btn-accent, .hero .btn {
+    background-color: #38bdf8;
+    color: #0f172a;
+}
+
+.btn-accent:hover, .hero .btn:hover {
+    background-color: #0ea5e9;
     color: #ffffff;
     transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(56, 189, 248, 0.3);
 }
+
+/* White Button Style (e.g. CTA Banner) */
+.btn-white, .cta-banner .btn {
+    background-color: #ffffff;
+    color: #0ea5e9;
+}
+
+.btn-white:hover, .cta-banner .btn:hover {
+    background-color: #f8fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Width Full Modifier */
+.btn-full {
+    width: 100%;
+}
+
 .features {
     margin-top: 80px;
     display: grid;
@@ -261,25 +310,7 @@ main {
     font-weight: bold;
 }
 
-.service-btn {
-    display: inline-block;
-    padding: 12px 30px;
-    background: #0f172a;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: background 0.3s ease;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.service-btn:hover {
-    background: #38bdf8;
-    color: #0f172a;
-}
+/* Old .service-btn removed - handled by unified styles */
 
 .safety-promise {
     background: white;
@@ -764,23 +795,7 @@ footer {
     outline: none;
 }
 
-.btn-submit {
-    background: #0f172a;
-    color: white;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-    width: 100%;
-}
-
-.btn-submit:hover {
-    background: #38bdf8;
-    color: #0f172a;
-}
+/* Old .btn-submit removed - handled by unified styles */
 
 /* Auth Pages (Login/Signup) Styles */
 .auth-main {
