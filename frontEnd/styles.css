@@ -1,17 +1,54 @@
+/* Global Enhancements */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    background-color: #f4f6f8;
+    font-family: "Inter", "Segoe UI", Tahoma, sans-serif; /* Prefer Inter if available */
+    background-color: #f8fafc; /* Slightly lighter/cleaner background */
+    color: #334155;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Selection Color */
+::selection {
+    background: #38bdf8;
+    color: #fff;
 }
 
 header {
-    background: linear-gradient(135deg, #111827, #1f2933);
-    padding: 18px 60px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px 5%; /* Use percentage for responsiveness */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    position: relative; /* For absolute pos of mobile nav if needed */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 .header-content {
