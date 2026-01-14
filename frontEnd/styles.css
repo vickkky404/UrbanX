@@ -1664,3 +1664,105 @@ footer {
         cursor: pointer;
     }
 }
+
+/* --- Login / Signup Pages --- */
+.login-container {
+    max-width: 420px;
+    margin: 60px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f5f9;
+}
+
+.login-container h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #0f172a;
+    text-align: center;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    background-color: #fff;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+}
+
+.login-container .btn-submit {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 16px;
+    padding: 16px;
+    border-radius: 10px;
+}
+
+.login-links {
+    margin-top: 30px;
+    text-align: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 25px;
+}
+
+.login-links p {
+    margin: 10px 0;
+    color: #64748b;
+    font-size: 15px;
+}
+
+.login-links a {
+    color: #0284c7;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-links a:hover {
+    color: #0369a1;
+    text-decoration: underline;
+}
+
+/* Captain specific tweaks */
+.login-container.captain-login {
+    border-top: 5px solid #0ea5e9;
+}
+
+.login-container.captain-login h2 {
+    color: #0e7490;
+}
+
+/* Responsive adjustments for Login */
+@media (max-width: 600px) {
+    .login-container {
+        margin: 30px 20px;
+        padding: 30px 20px;
+    }
+}
