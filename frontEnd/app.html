@@ -267,6 +267,23 @@
     let searchTimeout;
     let routeLine;
     let driverMarkers = [];
+    let currentRate = 15; // Default Cab rate
+
+    function selectVehicle(type, rate) {
+        // Update UI
+        document.querySelectorAll('.vehicle-card').forEach(el => el.classList.remove('selected'));
+        const card = document.querySelector(`.vehicle-card[data-name="${type}"]`);
+        if (card) card.classList.add('selected');
+
+        // Update Hidden Input
+        document.getElementById('vehicle_type').value = type;
+
+        // Update Rate
+        currentRate = rate;
+
+        // Recalculate if route exists
+        calculatePrice();
+    }
 
     // Haversine Distance Calculation
     function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -298,16 +315,28 @@
 
         if (!isNaN(lat1) && !isNaN(lon1) && !isNaN(lat2) && !isNaN(lon2)) {
             const dist = getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2);
-            // Add 20% for road vs straight line
             const roadDist = dist * 1.2;
 
-            // Calculate Price
-            const vehicleSelect = document.getElementById('vehicle_type');
-            const rate = parseFloat(vehicleSelect.options[vehicleSelect.selectedIndex].dataset.rate);
-            const price = Math.round(Math.max(20, roadDist * rate)); // Min fare 20
+            // Rates
+            const rates = {
+                'Cycle': 8,
+                'Moto': 7,
+                'Auto': 10,
+                'Cab': 15
+            };
 
-            // Est Time (avg speed 25km/h city)
-            const time = Math.round((roadDist / 25) * 60);
+            // Update all cards prices
+            for (const [type, rate] of Object.entries(rates)) {
+                const price = Math.round(Math.max(20, roadDist * rate));
+                const el = document.getElementById(`price-${type}`);
+                if (el) el.textContent = '₹' + price;
+            }
+
+            // Update Main Details (based on current selection)
+            const vehicleType = document.getElementById('vehicle_type').value;
+            const rate = rates[vehicleType] || 15;
+            const price = Math.round(Math.max(20, roadDist * rate));
+            const time = Math.round((roadDist / 25) * 60); // Simple time calc
 
             document.getElementById('est-dist').textContent = roadDist.toFixed(1) + ' km';
             document.getElementById('est-time').textContent = time + ' mins';
@@ -318,12 +347,11 @@
             // Draw Route Line
             if (window.map) {
                 if (routeLine) window.map.removeLayer(routeLine);
-                routeLine = L.polyline([[lat1, lon1], [lat2, lon2]], {color: '#38bdf8', weight: 5, opacity: 0.7, dashArray: '10, 10'}).addTo(window.map);
+                routeLine = L.polyline([[lat1, lon1], [lat2, lon2]], {color: '#38bdf8', weight: 5, opacity: 0.8}).addTo(window.map);
                 window.map.fitBounds(routeLine.getBounds(), {padding: [50, 50]});
             }
         } else {
             detailsDiv.style.display = 'none';
-            if (routeLine && window.map) window.map.removeLayer(routeLine);
         }
     }
 
