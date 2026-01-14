@@ -57,14 +57,55 @@
                         <input type="text" id="dropoff" name="dropoff" placeholder="Dropoff Location" required onkeyup="searchLocation('dropoff')" data-lat="" data-lon="">
                         <div id="dropoff-results" class="search-results" style="display:none; position:absolute; width:100%; top: 100%; left:0; max-height:200px; overflow-y:auto; background:white; border:1px solid #ccc; z-index:1001; border-radius:0 0 6px 6px;"></div>
                     </div>
-                    <div class="input-group">
-                        <i class="fas fa-car-side"></i>
-                        <select id="vehicle_type" name="vehicle_type" onchange="calculatePrice()">
-                            <option value="Cycle" data-rate="8">Cycle (Eco-Friendly)</option>
-                            <option value="Moto" data-rate="7">Moto</option>
-                            <option value="Auto" data-rate="10">Auto</option>
-                            <option value="Cab" data-rate="15" selected>Cab</option>
-                        </select>
+                    <!-- Vehicle Selection -->
+                    <h4 style="margin: 15px 0 10px; color: #64748b; font-size: 14px; text-transform: uppercase;">Select Ride</h4>
+                    <input type="hidden" id="vehicle_type" name="vehicle_type" value="Cab">
+
+                    <div class="vehicle-selection" id="vehicle-options">
+                        <!-- Vehicle Options (Pre-filled to match logic) -->
+                        <div class="vehicle-card" onclick="selectVehicle('Cycle', 8)" data-name="Cycle">
+                            <div class="vehicle-icon-wrapper">
+                                <i class="fas fa-bicycle vehicle-img"></i>
+                                <div class="vehicle-details">
+                                    <span class="vehicle-name">Cycle</span>
+                                    <span class="vehicle-sub">Eco-Friendly</span>
+                                </div>
+                            </div>
+                            <span class="vehicle-cost" id="price-Cycle">₹-</span>
+                        </div>
+
+                        <div class="vehicle-card" onclick="selectVehicle('Moto', 7)" data-name="Moto">
+                            <div class="vehicle-icon-wrapper">
+                                <i class="fas fa-motorcycle vehicle-img"></i>
+                                <div class="vehicle-details">
+                                    <span class="vehicle-name">Moto</span>
+                                    <span class="vehicle-sub">Fastest</span>
+                                </div>
+                            </div>
+                            <span class="vehicle-cost" id="price-Moto">₹-</span>
+                        </div>
+
+                        <div class="vehicle-card" onclick="selectVehicle('Auto', 10)" data-name="Auto">
+                            <div class="vehicle-icon-wrapper">
+                                <i class="fas fa-shuttle-van vehicle-img"></i> <!-- Using shuttle van for auto-rickshaw approximation -->
+                                <div class="vehicle-details">
+                                    <span class="vehicle-name">Auto</span>
+                                    <span class="vehicle-sub">Reliable</span>
+                                </div>
+                            </div>
+                            <span class="vehicle-cost" id="price-Auto">₹-</span>
+                        </div>
+
+                        <div class="vehicle-card selected" onclick="selectVehicle('Cab', 15)" data-name="Cab">
+                            <div class="vehicle-icon-wrapper">
+                                <i class="fas fa-car vehicle-img"></i>
+                                <div class="vehicle-details">
+                                    <span class="vehicle-name">Cab</span>
+                                    <span class="vehicle-sub">Comfort</span>
+                                </div>
+                            </div>
+                            <span class="vehicle-cost" id="price-Cab">₹-</span>
+                        </div>
                     </div>
 
                     <div id="ride-details" class="ride-info">
