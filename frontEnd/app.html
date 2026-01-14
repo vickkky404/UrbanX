@@ -612,15 +612,24 @@
                 }
 
                 list.innerHTML = userRides.map(ride => `
-                    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #38bdf8;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <strong>Ride #${ride.id}</strong>
-                            <span style="background: #f0f9ff; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; font-weight: bold;">${ride.status}</span>
+                    <div class="ride-item">
+                        <div class="ride-header">
+                            <span class="ride-id">Ride #${ride.id}</span>
+                            <span class="ride-status-badge">${ride.status}</span>
                         </div>
-                        <p style="margin: 5px 0; color: #64748b;"><strong>From:</strong> ${ride.pickup}</p>
-                        <p style="margin: 5px 0; color: #64748b;"><strong>To:</strong> ${ride.dropoff}</p>
-                        <p style="margin: 5px 0; color: #64748b;"><strong>Type:</strong> ${ride.vehicle_type}</p>
-                        <small style="color: #94a3b8; display: block; margin-top: 10px;">${new Date(ride.created_at).toLocaleString()}</small>
+                        <div class="ride-detail-row">
+                            <i class="fas fa-map-marker-alt" style="color:#22c55e"></i>
+                            <span class="ride-detail-text">${ride.pickup}</span>
+                        </div>
+                        <div class="ride-detail-row">
+                            <i class="fas fa-map-pin" style="color:#ef4444"></i>
+                            <span class="ride-detail-text">${ride.dropoff}</span>
+                        </div>
+                        <div class="ride-detail-row">
+                            <i class="fas fa-car-side"></i>
+                            <span class="ride-detail-text">${ride.vehicle_type}</span>
+                        </div>
+                        <small class="ride-date">${new Date(ride.created_at).toLocaleString()}</small>
                     </div>
                 `).join('');
             }
