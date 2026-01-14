@@ -1507,3 +1507,76 @@ footer {
         align-self: flex-end;
     }
 }
+
+/* Ride List Item Styles */
+.ride-item {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-left: 5px solid #38bdf8;
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.ride-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+}
+
+.ride-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ride-id {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 16px;
+}
+
+.ride-status-badge {
+    background: #e0f2fe;
+    color: #0284c7;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.ride-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.ride-detail-row i {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 4px;
+    width: 16px;
+    text-align: center;
+}
+
+.ride-detail-text {
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.ride-date {
+    color: #94a3b8;
+    display: block;
+    margin-top: 12px;
+    font-size: 12px;
+    text-align: right;
+}
