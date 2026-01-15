@@ -603,7 +603,7 @@
             const data = await response.json();
 
             if (data.status === 'ok') {
-                // Filter rides for current user (Client-side filtering for prototype)
+                // client side filtering for demoo purposes only....
                 const userRides = data.rides.filter(ride => ride.user_id == user.id);
 
                 if (userRides.length === 0) {
