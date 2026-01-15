@@ -378,10 +378,10 @@ def estimate_fare():
 
     # Pricing configuration (per km)
     rates = {
-        'Cab': 15.0,
+        'Cab': 21.0,
         'Auto': 10.0,
         'Moto': 7.0,
-        'Cycle': 8.0  # Set to 8 Rupees as per request
+        'Cycle': 2.0  # Set to 8 Rupees as per request
     }
 
     estimates = {}
