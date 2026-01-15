@@ -3,7 +3,6 @@ import sys
 
 try:
     with app.app_context():
-        # Try to query the User table
         count = User.query.count()
         print(f"User table exists. Count: {count}")
         users = User.query.all()
