@@ -359,7 +359,7 @@ def update_profile(user_id):
     if fullname:
         user.fullname = fullname
     if email:
-        # Check if email is taken by someone else
+
         existing = User.query.filter_by(email=email).first()
         if existing and existing.id != user.id:
             return jsonify({"status": "error", "message": "Email already in use"}), 400
