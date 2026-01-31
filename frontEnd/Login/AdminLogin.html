@@ -5,32 +5,65 @@
     <title>UrbanX - Admin Login</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
-<header>
-    <h1>UrbanX Admin</h1>
-    <nav>
-        <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="AdminLogin.html" class="active">Admin Login</a></li>
-        </ul>
-    </nav>
+<body class="auth-page">
+<header class="auth-header">
+    <div class="auth-brand">
+        <div class="auth-logo" aria-hidden="true">UX</div>
+        <div class="auth-name">UrbanX</div>
+    </div>
+    <div class="auth-actions">
+        <a class="auth-tab" href="../index.html">Home</a>
+    </div>
 </header>
 <main class="auth-main">
-    <div class="login-container admin-login">
-        <h2>Administrator Access</h2>
-        <form action="/admin/login" method="post">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-panel">
+                <div class="auth-panel-title">Admin Access</div>
+                <form id="adminLoginForm">
+                    <div class="auth-row">
+                        <label class="auth-label" for="email">Email</label>
+                        <input class="auth-input" type="email" id="email" name="email" placeholder="Admin email" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="password">Password</label>
+                        <input class="auth-input" type="password" id="password" name="password" placeholder="Admin password" required>
+                    </div>
+                    <button type="submit" class="auth-submit">Sign In</button>
+                    <div id="message" class="auth-message"></div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn-submit">Login</button>
-        </form>
+        </div>
     </div>
 </main>
+<script>
+    document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        const messageDiv = document.getElementById('message');
+
+        try {
+            const response = await fetch('/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (response.ok) {
+                messageDiv.style.color = 'green';
+                messageDiv.textContent = 'Login successful!';
+                localStorage.setItem('userType', 'admin');
+                setTimeout(() => { window.location.href = '../index.html'; }, 1000);
+            } else {
+                messageDiv.style.color = '';
+                messageDiv.textContent = result.message || 'Login failed';
+            }
+        } catch (error) {
+            messageDiv.textContent = 'An error occurred. Please try again.';
+        }
+    });
+</script>
 <footer>
     <p>&copy; 2026 UrbanX. All rights reserved.</p>
 </footer>
