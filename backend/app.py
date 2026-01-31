@@ -307,12 +307,16 @@ def user_signup():
     fullname = (data.get('fullname') or '').strip()
     email = normalize_email(data.get('email'))
     password = (data.get('password') or '').strip()
+    gender = (data.get('gender') or '').strip().lower()
 
     if not fullname or not email or not password:
         return jsonify({"status": "error", "message": "Full name, email, and password are required"}), 400
 
     if not is_valid_email(email):
         return jsonify({"status": "error", "message": "Enter a valid email address"}), 400
+
+    if gender and gender not in ['male', 'female', 'other']:
+        return jsonify({"status": "error", "message": "Invalid gender selection"}), 400
 
     password_error = validate_password(password)
     if password_error:
@@ -321,7 +325,7 @@ def user_signup():
     if User.query.filter_by(email=email).first():
         return jsonify({"status": "error", "message": "Email already registered"}), 400
 
-    user = User(fullname=fullname, email=email)
+    user = User(fullname=fullname, email=email, gender=gender if gender else None)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()

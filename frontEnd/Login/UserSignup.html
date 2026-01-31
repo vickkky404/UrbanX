@@ -33,6 +33,16 @@
                         <input class="auth-input" type="email" id="email" name="email" placeholder="Enter your email" required>
                     </div>
                     <div class="auth-row">
+                        <label class="auth-label" for="gender">Gender</label>
+                        <select class="auth-input" id="gender" name="gender" required>
+                            <option value="" disabled selected>Select your gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <small class="gender-hint">For your safety, you'll be matched with same-gender drivers</small>
+                    </div>
+                    <div class="auth-row">
                         <label class="auth-label" for="password">Password</label>
                         <input class="auth-input" type="password" id="password" name="password" placeholder="Min. 8 characters" required>
                     </div>

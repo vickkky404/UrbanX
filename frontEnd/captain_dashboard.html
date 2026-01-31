@@ -280,7 +280,7 @@
 
         async function fetchRideRequests() {
             try {
-                const response = await fetch(`/api/captain/rides/pending?vehicle_type=${captain.vehicle_type}`);
+                const response = await fetch(`/api/captain/rides/pending?vehicle_type=${captain.vehicle_type}&gender=${captain.gender || ''}`);
                 const data = await response.json();
                 if (data.status === 'ok' && data.rides.length > 0) {
                     showRideRequest(data.rides[0]);
