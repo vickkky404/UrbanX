@@ -5,41 +5,41 @@
     <title>UrbanX - User Login</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
-<header>
-    <h1>UrbanX</h1>
-    <nav>
-        <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../exploreOurServices.html">Services</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="../app.html">Launch App</a></li>
-            <li><a href="UserLogin.html" class="active">Login/Signup</a></li>
-        </ul>
-    </nav>
+<body class="auth-page">
+<header class="auth-header">
+    <div class="auth-brand">
+        <div class="auth-logo" aria-hidden="true">UX</div>
+        <div class="auth-name">Urbanex</div>
+    </div>
+    <div class="auth-actions" aria-label="Authentication navigation">
+        <a class="auth-tab active" href="UserLogin.html">Login</a>
+        <a class="auth-tab" href="UserSignup.html">Signup</a>
+    </div>
 </header>
 
-<main>
-    <div class="login-container">
-        <h2>User Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">Username/Email:</label>
-                <input type="text" id="username" name="username" required>
+<main class="auth-main">
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-panel">
+                <div class="auth-panel-title">Login (User)</div>
+                <form id="loginForm">
+                    <div class="auth-row">
+                        <label class="auth-label" for="username">Login ID =</label>
+                        <input class="auth-input" type="text" id="username" name="username" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="password">Password =</label>
+                        <input class="auth-input" type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="auth-submit">submit</button>
+                    <div id="error-msg" class="auth-message" style="display: none;"></div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn-submit">Login</button>
-            <div id="error-msg" style="color: red; margin-top: 10px; display: none;"></div>
-
-            <div class="login-links">
-                <p>New to UrbanX? <a href="UserSignup.html">Sign Up here</a></p>
-                <p>Are you a Captain? <a href="CaptainLogin.html">Login as Captain</a></p>
-            </div>
-        </form>
+        </div>
+    </div>
+    <div class="auth-footer-cta">
+        <span>Want to register as a captain and earn some real money, click here</span>
+        <a class="auth-cta-button" href="CaptainSignup.html">Captain</a>
     </div>
 </main>
 
