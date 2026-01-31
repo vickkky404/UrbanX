@@ -66,6 +66,38 @@ header h1 {
     font-weight: 600;
 }
 
+.site-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.site-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #0f172a;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 1px;
+}
+
+.site-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: 26px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+header h1.site-title {
+    margin: 0;
+}
+
 .menu-toggle {
     display: none;
     background: none;
