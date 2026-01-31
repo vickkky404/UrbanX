@@ -32,9 +32,15 @@ class Captain(db.Model):
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(20), nullable=True)
     vehicle_type = db.Column(db.String(50), nullable=True)
-    age = db.Column(db.Integer, nullable=True)  # New field for captain's age
-    total_earnings = db.Column(db.Float, default=0.0)  # New field for captain's total earnings
+    vehicle_number = db.Column(db.String(50), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    gender = db.Column(db.String(20), nullable=True)  # male, female, other
+    total_earnings = db.Column(db.Float, default=0.0)
+    is_verified = db.Column(db.Boolean, default=False)
+    is_online = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
@@ -60,7 +66,10 @@ class User(db.Model):
     fullname = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(20), nullable=True)
+    gender = db.Column(db.String(20), nullable=True)  # male, female, other
     balance = db.Column(db.Float, default=1000.0)  # Default sign-up bonus
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
@@ -367,9 +376,13 @@ def captain_login():
                 "id": captain.id,
                 "name": captain.name,
                 "age": captain.age,
+                "gender": captain.gender,
+                "phone": captain.phone,
                 "vehicle_type": captain.vehicle_type,
+                "vehicle_number": captain.vehicle_number,
                 "email": captain.email,
-                "total_earnings": captain.total_earnings
+                "total_earnings": captain.total_earnings,
+                "is_verified": captain.is_verified
             }
         }), 200
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
@@ -381,12 +394,17 @@ def captain_signup():
     email = normalize_email(data.get('email'))
     password = (data.get('password') or '').strip()
     vehicle_type = (data.get('vehicle_type') or '').strip()
+    vehicle_number = (data.get('vehicle_number') or '').strip()
+    phone = (data.get('phone') or '').strip()
+    gender = (data.get('gender') or '').strip().lower()
     age = data.get('age')
 
     if not name or not email or not password:
         return jsonify({"status": "error", "message": "Name, email, and password are required"}), 400
     if not is_valid_email(email):
         return jsonify({"status": "error", "message": "Enter a valid email address"}), 400
+    if not gender or gender not in ['male', 'female', 'other']:
+        return jsonify({"status": "error", "message": "Please select your gender"}), 400
 
     password_error = validate_password(password)
     if password_error:
@@ -397,17 +415,43 @@ def captain_signup():
             age = int(age)
         except (TypeError, ValueError):
             return jsonify({"status": "error", "message": "Age must be a number"}), 400
-        if age < 18 or age > 80:
-            return jsonify({"status": "error", "message": "Age must be between 18 and 80"}), 400
+        # Allow teens (16+) for cycle, 18+ for bike/auto, 21+ for cab
+        if age < 16 or age > 80:
+            return jsonify({"status": "error", "message": "Age must be between 16 and 80"}), 400
+
+        # Validate age requirements for vehicle type
+        if vehicle_type == 'Cab' and age < 21:
+            return jsonify({"status": "error", "message": "You must be 21+ to drive a Cab"}), 400
+        if vehicle_type in ['Bike', 'Auto'] and age < 18:
+            return jsonify({"status": "error", "message": "You must be 18+ to drive a Bike or Auto"}), 400
+        if vehicle_type == 'Cycle' and age < 16:
+            return jsonify({"status": "error", "message": "You must be 16+ to use a Cycle"}), 400
 
     if Captain.query.filter_by(email=email).first():
         return jsonify({"status": "error", "message": "Email already registered"}), 400
 
-    captain = Captain(name=name, email=email, vehicle_type=vehicle_type, age=age)
+    # Set is_verified to False for young captains requiring document verification
+    is_verified = True if age and age > 21 else False
+
+    captain = Captain(
+        name=name,
+        email=email,
+        vehicle_type=vehicle_type,
+        vehicle_number=vehicle_number,
+        phone=phone,
+        gender=gender,
+        age=age,
+        is_verified=is_verified
+    )
     captain.set_password(password)
     db.session.add(captain)
     db.session.commit()
-    return jsonify({"status": "ok", "message": "Captain registered"}), 201
+
+    message = "Captain registered successfully!"
+    if not is_verified:
+        message += " Your documents will be verified within 24-48 hours."
+
+    return jsonify({"status": "ok", "message": message, "captain_id": captain.id}), 201
 
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
@@ -948,6 +992,136 @@ def ensure_default_promos():
             promo = PromoCode(**p)
             db.session.add(promo)
     db.session.commit()
+
+
+# ========================================
+# CAPTAIN API ENDPOINTS
+# ========================================
+
+@app.route('/api/captain/rides/pending', methods=['GET'])
+def get_pending_rides():
+    vehicle_type = request.args.get('vehicle_type', 'Cab')
+    captain_gender = request.args.get('gender')
+
+    # Base query for pending rides
+    query = Ride.query.filter_by(status='requested', vehicle_type=vehicle_type)
+
+    # If captain gender is provided, filter rides by matching user gender
+    if captain_gender and captain_gender in ['male', 'female']:
+        # Get user IDs that match the captain's gender
+        matching_users = User.query.filter_by(gender=captain_gender).with_entities(User.id).all()
+        matching_user_ids = [u.id for u in matching_users]
+
+        # Also include rides where user gender is not specified (for backward compatibility)
+        query = query.filter(
+            db.or_(
+                Ride.user_id.in_(matching_user_ids),
+                Ride.user_id.is_(None)
+            )
+        )
+
+    rides = query.order_by(Ride.created_at.desc()).limit(10).all()
+
+    return jsonify({
+        "status": "ok",
+        "rides": [{
+            "id": r.id,
+            "pickup": r.pickup,
+            "dropoff": r.dropoff,
+            "vehicle_type": r.vehicle_type,
+            "fare": r.fare,
+            "distance_km": r.distance_km,
+            "created_at": r.created_at.isoformat()
+        } for r in rides]
+    })
+
+
+@app.route('/api/captain/rides/<int:ride_id>/accept', methods=['POST'])
+def captain_accept_ride(ride_id):
+    data = request.get_json(silent=True) or request.form
+    captain_id = data.get('captain_id')
+
+    ride = Ride.query.get(ride_id)
+    if not ride:
+        return jsonify({"status": "error", "message": "Ride not found"}), 404
+
+    if ride.status != 'requested':
+        return jsonify({"status": "error", "message": "Ride already taken"}), 400
+
+    ride.status = 'accepted'
+    ride.captain_id = captain_id
+    db.session.commit()
+
+    return jsonify({"status": "ok", "message": "Ride accepted"})
+
+
+@app.route('/api/captain/rides/<int:ride_id>/complete', methods=['POST'])
+def captain_complete_ride(ride_id):
+    data = request.get_json(silent=True) or request.form
+    captain_id = data.get('captain_id')
+
+    ride = Ride.query.get(ride_id)
+    if not ride:
+        return jsonify({"status": "error", "message": "Ride not found"}), 404
+
+    ride.status = 'completed'
+    ride.completed_at = datetime.utcnow()
+
+    # Add earnings to captain
+    if captain_id:
+        captain = Captain.query.get(captain_id)
+        if captain:
+            captain.total_earnings = (captain.total_earnings or 0) + (ride.fare or 0)
+
+    db.session.commit()
+
+    return jsonify({"status": "ok", "message": "Ride completed"})
+
+
+@app.route('/api/captain/<int:captain_id>/rides', methods=['GET'])
+def get_captain_rides(captain_id):
+    rides = Ride.query.filter_by(captain_id=captain_id).order_by(Ride.created_at.desc()).limit(50).all()
+    return jsonify({
+        "status": "ok",
+        "rides": [{
+            "id": r.id,
+            "pickup": r.pickup,
+            "dropoff": r.dropoff,
+            "vehicle_type": r.vehicle_type,
+            "status": r.status,
+            "fare": r.fare,
+            "distance_km": r.distance_km,
+            "created_at": r.created_at.isoformat()
+        } for r in rides]
+    })
+
+
+@app.route('/api/captain/<int:captain_id>/stats', methods=['GET'])
+def get_captain_stats(captain_id):
+    captain = Captain.query.get(captain_id)
+    if not captain:
+        return jsonify({"status": "error", "message": "Captain not found"}), 404
+
+    from datetime import date
+    today = date.today()
+
+    today_rides = Ride.query.filter(
+        Ride.captain_id == captain_id,
+        Ride.status == 'completed',
+        db.func.date(Ride.completed_at) == today
+    ).all()
+
+    today_earnings = sum(r.fare or 0 for r in today_rides)
+
+    return jsonify({
+        "status": "ok",
+        "stats": {
+            "today_earnings": today_earnings,
+            "trips_today": len(today_rides),
+            "total_earnings": captain.total_earnings or 0,
+            "rating": 4.8  # Would calculate from Rating table
+        }
+    })
 
 
 with app.app_context():
