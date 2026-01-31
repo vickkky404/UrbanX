@@ -5,52 +5,55 @@
     <title>UrbanX - Captain Signup</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
-<header>
-    <h1>UrbanX Captain</h1>
-    <nav>
-        <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="CaptainLogin.html">Login</a></li>
-        </ul>
-    </nav>
+<body class="auth-page">
+<header class="auth-header">
+    <div class="auth-brand">
+        <div class="auth-logo" aria-hidden="true">UX</div>
+        <div class="auth-name">Urbanex</div>
+    </div>
+    <div class="auth-actions" aria-label="Authentication navigation">
+        <a class="auth-tab" href="CaptainLogin.html">Login</a>
+        <a class="auth-tab active" href="CaptainSignup.html">Signup</a>
+    </div>
 </header>
-<main>
-    <div class="login-container captain-login">
-        <h2>Become a Captain</h2>
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="fullname">Full Name:</label>
-                <input type="text" id="fullname" name="fullname" required>
+<main class="auth-main">
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-panel">
+                <div class="auth-panel-title">Signup (Captain)</div>
+                <form id="signupForm">
+                    <div class="auth-row">
+                        <label class="auth-label" for="fullname">Full Name =</label>
+                        <input class="auth-input" type="text" id="fullname" name="fullname" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="email">Email =</label>
+                        <input class="auth-input" type="email" id="email" name="email" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="age">Age =</label>
+                        <input class="auth-input" type="number" id="age" name="age" min="18" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="vehicle_type">Vehicle Type =</label>
+                        <select class="auth-input" id="vehicle_type" name="vehicle_type">
+                            <option value="bike">Bike</option>
+                            <option value="auto">Auto</option>
+                            <option value="cab">Cab</option>
+                        </select>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="password">Password =</label>
+                        <input class="auth-input" type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="auth-submit">submit</button>
+                    <div id="message" class="auth-message"></div>
+                    <p class="switch-auth">
+                        Already a Captain? <a href="CaptainLogin.html">Login here</a>
+                    </p>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-             <div class="form-group">
-                <label for="age">Age:</label>
-                <input type="number" id="age" name="age" min="18" required>
-            </div>
-             <div class="form-group">
-                <label for="vehicle_type">Vehicle Type:</label>
-                <select id="vehicle_type" name="vehicle_type">
-                    <option value="bike">Bike</option>
-                    <option value="auto">Auto</option>
-                    <option value="cab">Cab</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn-submit">Register</button>
-
-            <div id="message" style="margin-top: 10px; color: red;"></div>
-
-            <p class="switch-auth">
-                Already a Captain? <a href="CaptainLogin.html">Login here</a>
-            </p>
-        </form>
+        </div>
     </div>
 </main>
 <script>
@@ -87,11 +90,8 @@
         }
     });
 </script>
-    </div>
-</main>
 <footer>
     <p>&copy; 2026 UrbanX. All rights reserved.</p>
 </footer>
 </body>
 </html>
-
