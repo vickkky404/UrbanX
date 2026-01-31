@@ -16,11 +16,14 @@
 <div class="app-container">
     <div class="sidebar">
         <h2>UrbanX</h2>
-        <div id="user-info" style="padding: 0 10px 20px; color: #38bdf8; font-size: 14px; border-bottom: 1px solid #334155; margin-bottom: 20px;"></div>
+        <div id="user-info" class="user-info-box"></div>
         <ul>
             <li><a href="#" class="active" onclick="showSection('book-ride', event)"><i class="fas fa-map-marked-alt"></i> Book a Ride</a></li>
             <li><a href="#" onclick="showSection('my-rides', event); loadRides();"><i class="fas fa-car"></i> My Rides</a></li>
             <li><a href="#" onclick="showSection('wallet', event)"><i class="fas fa-wallet"></i> Wallet</a></li>
+            <li><a href="#" onclick="showSection('promotions', event)"><i class="fas fa-tag"></i> Offers</a></li>
+            <li><a href="#" onclick="showSection('saved-places', event)"><i class="fas fa-heart"></i> Saved</a></li>
+            <li><a href="#" onclick="showSection('support', event)"><i class="fas fa-headset"></i> Support</a></li>
             <li><a href="#" onclick="showSection('settings', event)"><i class="fas fa-cog"></i> Settings</a></li>
             <li style="margin-top: auto;"><a href="#" onclick="logout()" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
@@ -58,7 +61,7 @@
                         <div id="dropoff-results" class="search-results" style="display:none; position:absolute; width:100%; top: 100%; left:0; max-height:200px; overflow-y:auto; background:white; border:1px solid #ccc; z-index:1001; border-radius:0 0 6px 6px;"></div>
                     </div>
                     <!-- Vehicle Selection -->
-                    <h4 style="margin: 15px 0 10px; color: #64748b; font-size: 14px; text-transform: uppercase;">Select Ride</h4>
+                    <h4 class="vehicle-heading">Select Ride</h4>
                     <input type="hidden" id="vehicle_type" name="vehicle_type" value="Cab">
 
                     <div class="vehicle-selection" id="vehicle-options">
@@ -130,8 +133,8 @@
         </div>
 
         <!-- My Rides Section -->
-        <div id="my-rides-section" class="dashboard-section" style="display: none; width: 100%; padding: 40px; overflow-y: auto; background: #f4f6f8; box-sizing: border-box;">
-            <h2 style="color: #0f172a; margin-top: 0;">My Rides</h2>
+        <div id="my-rides-section" class="dashboard-section" style="display: none;">
+            <h2 class="section-title">My Rides</h2>
 
             <div class="stats-grid">
                 <div class="stat-card">
@@ -144,15 +147,14 @@
                 </div>
             </div>
 
-            <div id="rides-list" style="display: grid; gap: 20px;">
-                <!-- Rides will be loaded here -->
+            <div id="rides-list" class="rides-list">
                 <p>Loading rides...</p>
             </div>
         </div>
 
         <!-- Wallet Section -->
-        <div id="wallet-section" class="dashboard-section" style="display: none; width: 100%; padding: 40px; overflow-y: auto; background: #f4f6f8; box-sizing: border-box;">
-            <h2 style="color: #0f172a; margin-top: 0;">Wallet</h2>
+        <div id="wallet-section" class="dashboard-section" style="display: none;">
+            <h2 class="section-title">Wallet</h2>
 
             <div class="wallet-card">
                 <div class="wallet-circle-1"></div>
@@ -171,46 +173,46 @@
                 </div>
             </div>
 
-            <div style="margin-top: 30px;">
-                <h3 style="color: #475569; font-size: 18px;">Recent Transactions</h3>
-                <div id="transaction-list" style="margin-top: 15px;">
+            <div class="wallet-recent">
+                <h3>Recent Transactions</h3>
+                <div id="transaction-list">
                     <div class="transaction-item">
-                        <div style="display: flex; align-items: center; gap: 15px;">
+                        <div class="tx-details">
                             <div class="tx-icon tx-credit">
                                 <i class="fas fa-gift"></i>
                             </div>
                             <div>
-                                <p style="margin: 0; font-weight: 600; color: #0f172a;">Sign-up Bonus</p>
-                                <p style="margin: 0; font-size: 12px; color: #64748b;">Welcome Gift</p>
+                                <p class="tx-title">Sign-up Bonus</p>
+                                <p class="tx-sub">Welcome Gift</p>
                             </div>
                         </div>
-                        <span style="color: #16a34a; font-weight: 600;">+₹1000.00</span>
+                        <span class="tx-amount tx-positive">+₹1000.00</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Settings Section -->
-        <div id="settings-section" class="dashboard-section" style="display: none; width: 100%; padding: 40px; overflow-y: auto; background: #f4f6f8; box-sizing: border-box;">
-            <h2 style="color: #0f172a; margin-top: 0;">Settings</h2>
+        <div id="settings-section" class="dashboard-section" style="display: none;">
+            <h2 class="section-title">Settings</h2>
 
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 600px;">
-                <h3 style="margin-top: 0; color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px;">Profile Details</h3>
+            <div class="settings-card">
+                <h3>Profile Details</h3>
 
-                <form id="settings-form" style="margin-top: 20px;">
+                <form id="settings-form">
                     <div class="input-group">
-                        <label style="display: block; margin-bottom: 5px; color: #475569; font-weight: 500;">Full Name</label>
-                        <input type="text" id="setting-name" name="fullname" style="padding-left: 12px;">
+                        <label>Full Name</label>
+                        <input type="text" id="setting-name" name="fullname">
                     </div>
                     <div class="input-group">
-                        <label style="display: block; margin-bottom: 5px; color: #475569; font-weight: 500;">Email Address</label>
-                        <input type="email" id="setting-email" name="email" style="padding-left: 12px;">
+                        <label>Email Address</label>
+                        <input type="email" id="setting-email" name="email">
                     </div>
 
-                    <button type="submit" class="ride-btn" style="width: auto; padding: 10px 30px;">
+                    <button type="submit" class="ride-btn" style="width: auto; padding: 12px 24px;">
                         Save Changes
                     </button>
-                    <div id="settings-msg" style="margin-top: 10px; display: none;"></div>
+                    <div id="settings-msg" class="settings-message"></div>
                 </form>
             </div>
         </div>
