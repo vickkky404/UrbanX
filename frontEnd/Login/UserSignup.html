@@ -5,48 +5,52 @@
     <title>UrbanX - User Signup</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
-<header>
-    <h1>UrbanX</h1>
-    <nav>
-        <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../about.html">About Us</a></li>
-            <li><a href="../exploreOurServices.html">Services</a></li>
-            <li><a href="../contact.html">Contact</a></li>
-            <li><a href="UserLogin.html">Login/Signup</a></li>
-        </ul>
-    </nav>
+<body class="auth-page">
+<header class="auth-header">
+    <div class="auth-brand">
+        <div class="auth-logo" aria-hidden="true">UX</div>
+        <div class="auth-name">Urbanex</div>
+    </div>
+    <div class="auth-actions" aria-label="Authentication navigation">
+        <a class="auth-tab" href="UserLogin.html">Login</a>
+        <a class="auth-tab active" href="UserSignup.html">Signup</a>
+    </div>
 </header>
-<main>
-    <div class="login-container">
-        <h2>Create an Account</h2>
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="fullname">Full Name:</label>
-                <input type="text" id="fullname" name="fullname" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-            </div>
-            <button type="submit" class="btn-submit">Sign Up</button>
-            <div id="msg" style="margin-top: 10px; display: none;"></div>
 
-            <p class="switch-auth">
-                Already have an account? <a href="UserLogin.html">Login here</a>
-            </p>
-        </form>
+<main class="auth-main">
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-panel">
+                <div class="auth-panel-title">Signup (User)</div>
+                <form id="signupForm">
+                    <div class="auth-row">
+                        <label class="auth-label" for="fullname">Full Name =</label>
+                        <input class="auth-input" type="text" id="fullname" name="fullname" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="email">Email =</label>
+                        <input class="auth-input" type="email" id="email" name="email" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="password">Password =</label>
+                        <input class="auth-input" type="password" id="password" name="password" required>
+                    </div>
+                    <div class="auth-row">
+                        <label class="auth-label" for="confirm_password">Confirm =</label>
+                        <input class="auth-input" type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="auth-submit">submit</button>
+                    <div id="msg" class="auth-message" style="display: none;"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="auth-footer-cta">
+        <span>Want to register as a captain and earn some real money, click here</span>
+        <a class="auth-cta-button" href="CaptainSignup.html">Captain</a>
     </div>
 </main>
+
 <footer>
     <p>&copy; 2026 UrbanX. All rights reserved.</p>
 </footer>
@@ -102,4 +106,3 @@
 </script>
 </body>
 </html>
-
