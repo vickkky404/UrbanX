@@ -9,7 +9,7 @@
 <header class="auth-header">
     <div class="auth-brand">
         <div class="auth-logo" aria-hidden="true">UX</div>
-        <div class="auth-name">Urbanex</div>
+        <div class="auth-name">UrbanX</div>
     </div>
     <div class="auth-actions" aria-label="Authentication navigation">
         <a class="auth-tab" href="UserLogin.html">Login</a>
@@ -21,33 +21,30 @@
     <div class="auth-shell">
         <div class="auth-card">
             <div class="auth-panel">
-                <div class="auth-panel-title">Signup (User)</div>
+                <div class="auth-panel-title">Create your account</div>
                 <form id="signupForm">
                     <div class="auth-row">
-                        <label class="auth-label" for="fullname">Full Name =</label>
-                        <input class="auth-input" type="text" id="fullname" name="fullname" required>
+                        <label class="auth-label" for="fullname">Full Name</label>
+                        <input class="auth-input" type="text" id="fullname" name="fullname" placeholder="Enter your name" required>
                     </div>
                     <div class="auth-row">
-                        <label class="auth-label" for="email">Email =</label>
-                        <input class="auth-input" type="email" id="email" name="email" required>
+                        <label class="auth-label" for="email">Email</label>
+                        <input class="auth-input" type="email" id="email" name="email" placeholder="Enter your email" required>
                     </div>
                     <div class="auth-row">
-                        <label class="auth-label" for="password">Password =</label>
-                        <input class="auth-input" type="password" id="password" name="password" required>
+                        <label class="auth-label" for="password">Password</label>
+                        <input class="auth-input" type="password" id="password" name="password" placeholder="Min. 8 characters" required>
                     </div>
                     <div class="auth-row">
-                        <label class="auth-label" for="confirm_password">Confirm =</label>
-                        <input class="auth-input" type="password" id="confirm_password" name="confirm_password" required>
+                        <label class="auth-label" for="confirm_password">Confirm Password</label>
+                        <input class="auth-input" type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
                     </div>
-                    <button type="submit" class="auth-submit">submit</button>
+                    <button type="submit" class="auth-submit">Create Account</button>
                     <div id="msg" class="auth-message" style="display: none;"></div>
+                    <p class="switch-auth">Already have an account? <a href="UserLogin.html">Sign in</a></p>
                 </form>
             </div>
         </div>
-    </div>
-    <div class="auth-footer-cta">
-        <span>Want to register as a captain and earn some real money, click here</span>
-        <a class="auth-cta-button" href="CaptainSignup.html">Captain</a>
     </div>
 </main>
 
