@@ -15,8 +15,26 @@
 
 <div class="app-container">
     <div class="sidebar">
-        <h2>UrbanX</h2>
+        <div class="sidebar-header">
+            <h2>UrbanX</h2>
+            <button class="notification-bell" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notification-count" style="display: none;">0</span>
+            </button>
+        </div>
         <div id="user-info" class="user-info-box"></div>
+
+        <!-- Notification Panel -->
+        <div id="notification-panel" class="notification-panel" style="display: none;">
+            <div class="notif-header">
+                <h4>Notifications</h4>
+                <button onclick="markAllRead()">Mark all read</button>
+            </div>
+            <div id="notification-list" class="notif-list">
+                <p class="empty-state">No notifications</p>
+            </div>
+        </div>
+
         <ul>
             <li><a href="#" class="active" onclick="showSection('book-ride', event)"><i class="fas fa-map-marked-alt"></i> Book a Ride</a></li>
             <li><a href="#" onclick="showSection('my-rides', event); loadRides();"><i class="fas fa-car"></i> My Rides</a></li>
@@ -242,10 +260,24 @@
                     <h4>Total Spent</h4>
                     <p id="total-spent-amount">₹0</p>
                 </div>
+                <div class="stat-card">
+                    <h4>Distance</h4>
+                    <p id="total-distance">0 km</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Favorite</h4>
+                    <p id="favorite-vehicle">-</p>
+                </div>
+            </div>
+
+            <div class="rides-filter">
+                <button class="filter-btn active" onclick="filterRides('all', this)">All</button>
+                <button class="filter-btn" onclick="filterRides('completed', this)">Completed</button>
+                <button class="filter-btn" onclick="filterRides('cancelled', this)">Cancelled</button>
             </div>
 
             <div id="rides-list" class="rides-list">
-                <p>Loading rides...</p>
+                <p class="empty-state">Loading rides...</p>
             </div>
         </div>
 
@@ -264,7 +296,7 @@
                     <button onclick="addFunds()" class="btn-wallet btn-add-fund">
                         <i class="fas fa-plus"></i> Add Money
                     </button>
-                    <button class="btn-wallet btn-history">
+                    <button onclick="showSection('my-rides', event); loadRides();" class="btn-wallet btn-history">
                         <i class="fas fa-history"></i> History
                     </button>
                 </div>
@@ -273,18 +305,7 @@
             <div class="wallet-recent">
                 <h3>Recent Transactions</h3>
                 <div id="transaction-list">
-                    <div class="transaction-item">
-                        <div class="tx-details">
-                            <div class="tx-icon tx-credit">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <div>
-                                <p class="tx-title">Sign-up Bonus</p>
-                                <p class="tx-sub">Welcome Gift</p>
-                            </div>
-                        </div>
-                        <span class="tx-amount tx-positive">+₹1000.00</span>
-                    </div>
+                    <p class="empty-state">Loading transactions...</p>
                 </div>
             </div>
         </div>
@@ -491,6 +512,73 @@
         window.location.href = 'Login/UserLogin.html';
     } else {
         document.getElementById('user-info').textContent = `Welcome, ${user.fullname}`;
+        loadNotifications();
+    }
+
+    // Notifications
+    async function loadNotifications() {
+        if (!user) return;
+        try {
+            const response = await fetch(`/api/user/${user.id}/notifications`);
+            const data = await response.json();
+
+            const badge = document.getElementById('notification-count');
+            if (data.status === 'ok' && data.unread_count > 0) {
+                badge.textContent = data.unread_count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            const list = document.getElementById('notification-list');
+            if (data.notifications && data.notifications.length > 0) {
+                list.innerHTML = data.notifications.map(n => `
+                    <div class="notif-item ${n.is_read ? '' : 'unread'}">
+                        <div class="notif-icon ${n.type}">
+                            <i class="fas fa-${getNotifIcon(n.type)}"></i>
+                        </div>
+                        <div class="notif-content">
+                            <p class="notif-title">${n.title}</p>
+                            <p class="notif-msg">${n.message}</p>
+                            <small>${timeAgo(n.created_at)}</small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (e) {
+            console.error('Error loading notifications:', e);
+        }
+    }
+
+    function getNotifIcon(type) {
+        const icons = { promo: 'tag', ride: 'car', alert: 'exclamation-circle', info: 'info-circle' };
+        return icons[type] || 'bell';
+    }
+
+    function timeAgo(dateStr) {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = Math.floor((now - date) / 1000);
+        if (diff < 60) return 'Just now';
+        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+        return Math.floor(diff / 86400) + 'd ago';
+    }
+
+    function toggleNotifications() {
+        const panel = document.getElementById('notification-panel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function markAllRead() {
+        if (!user) return;
+        try {
+            await fetch(`/api/user/${user.id}/notifications/read`, { method: 'POST' });
+            document.getElementById('notification-count').style.display = 'none';
+            document.querySelectorAll('.notif-item').forEach(item => item.classList.remove('unread'));
+        } catch (e) {
+            console.error('Error marking notifications read:', e);
+        }
     }
 
     function logout() {
@@ -875,50 +963,79 @@
     });
 
 
+    // Store rides globally for filtering
+    let allRides = [];
+
     // Load Rides
     async function loadRides() {
         const list = document.getElementById('rides-list');
-        list.innerHTML = '<p>Loading...</p>';
+        list.innerHTML = '<p class="empty-state">Loading...</p>';
 
         try {
-            const response = await fetch('/rides');
+            // Load user stats
+            const statsResponse = await fetch(`/api/user/${user.id}/stats`);
+            const statsData = await statsResponse.json();
+            if (statsData.status === 'ok') {
+                document.getElementById('total-rides-count').textContent = statsData.stats.total_rides;
+                document.getElementById('total-spent-amount').textContent = '₹' + statsData.stats.total_spent.toFixed(0);
+                document.getElementById('total-distance').textContent = statsData.stats.total_distance_km.toFixed(1) + ' km';
+                document.getElementById('favorite-vehicle').textContent = statsData.stats.favorite_vehicle || '-';
+            }
+
+            // Load rides
+            const response = await fetch(`/api/user/${user.id}/rides`);
             const data = await response.json();
 
             if (data.status === 'ok') {
-                // client side filtering for demoo purposes only....
-                const userRides = data.rides.filter(ride => ride.user_id == user.id);
-
-                if (userRides.length === 0) {
-                    list.innerHTML = '<p>No rides found.</p>';
-                    return;
-                }
-
-                list.innerHTML = userRides.map(ride => `
-                    <div class="ride-item">
-                        <div class="ride-header">
-                            <span class="ride-id">Ride #${ride.id}</span>
-                            <span class="ride-status-badge">${ride.status}</span>
-                        </div>
-                        </div>
-                        <div class="ride-detail-row">
-                            <i class="fas fa-map-marker-alt" style="color:#22c55e"></i>
-                            <span class="ride-detail-text">${ride.pickup}</span>
-                        </div>
-                        <div class="ride-detail-row">
-                            <i class="fas fa-map-pin" style="color:#ef4444"></i>
-                            <span class="ride-detail-text">${ride.dropoff}</span>
-                        </div>
-                        <div class="ride-detail-row">
-                            <i class="fas fa-car-side"></i>
-                            <span class="ride-detail-text">${ride.vehicle_type}</span>
-                        </div>
-                        <small class="ride-date">${new Date(ride.created_at).toLocaleString()}</small>
-                    </div>
-                `).join('');
+                allRides = data.rides;
+                renderRides(allRides);
             }
         } catch (err) {
             console.error(err);
-            list.innerHTML = '<p style="color: red;">Failed to load rides.</p>';
+            list.innerHTML = '<p class="empty-state" style="color: #c62828;">Failed to load rides.</p>';
+        }
+    }
+
+    function renderRides(rides) {
+        const list = document.getElementById('rides-list');
+
+        if (rides.length === 0) {
+            list.innerHTML = '<p class="empty-state">No rides found.</p>';
+            return;
+        }
+
+        list.innerHTML = rides.map(ride => `
+            <div class="ride-item" data-status="${ride.status}">
+                <div class="ride-header">
+                    <span class="ride-id">Ride #${ride.id}</span>
+                    <span class="ride-status-badge ${ride.status}">${ride.status}</span>
+                </div>
+                <div class="ride-detail-row">
+                    <i class="fas fa-map-marker-alt" style="color:#22c55e"></i>
+                    <span class="ride-detail-text">${ride.pickup}</span>
+                </div>
+                <div class="ride-detail-row">
+                    <i class="fas fa-map-pin" style="color:#ef4444"></i>
+                    <span class="ride-detail-text">${ride.dropoff}</span>
+                </div>
+                <div class="ride-meta">
+                    <span><i class="fas fa-car-side"></i> ${ride.vehicle_type}</span>
+                    <span><i class="fas fa-route"></i> ${ride.distance_km?.toFixed(1) || '0'} km</span>
+                    <span><i class="fas fa-rupee-sign"></i> ${ride.fare?.toFixed(0) || '0'}</span>
+                </div>
+                <small class="ride-date">${new Date(ride.created_at).toLocaleString()}</small>
+            </div>
+        `).join('');
+    }
+
+    function filterRides(status, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (status === 'all') {
+            renderRides(allRides);
+        } else {
+            renderRides(allRides.filter(r => r.status === status));
         }
     }
 
@@ -930,6 +1047,43 @@
             const data = await response.json();
             if (data.status === 'ok') {
                 document.getElementById('wallet-balance').textContent = data.balance.toFixed(2);
+            }
+
+            // Load transactions
+            const txResponse = await fetch(`/api/user/${user.id}/transactions`);
+            const txData = await txResponse.json();
+            const list = document.getElementById('transaction-list');
+
+            if (txData.status === 'ok' && txData.transactions.length > 0) {
+                list.innerHTML = txData.transactions.map(tx => `
+                    <div class="transaction-item">
+                        <div class="tx-details">
+                            <div class="tx-icon ${tx.type === 'credit' ? 'tx-credit' : 'tx-debit'}">
+                                <i class="fas fa-${tx.type === 'credit' ? 'plus' : 'minus'}"></i>
+                            </div>
+                            <div>
+                                <p class="tx-title">${tx.description || (tx.type === 'credit' ? 'Added' : 'Payment')}</p>
+                                <p class="tx-sub">${new Date(tx.created_at).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        <span class="tx-amount ${tx.type === 'credit' ? 'tx-positive' : 'tx-negative'}">
+                            ${tx.type === 'credit' ? '+' : ''}₹${Math.abs(tx.amount).toFixed(2)}
+                        </span>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = `
+                    <div class="transaction-item">
+                        <div class="tx-details">
+                            <div class="tx-icon tx-credit"><i class="fas fa-gift"></i></div>
+                            <div>
+                                <p class="tx-title">Sign-up Bonus</p>
+                                <p class="tx-sub">Welcome Gift</p>
+                            </div>
+                        </div>
+                        <span class="tx-amount tx-positive">+₹1000.00</span>
+                    </div>
+                `;
             }
         } catch (e) {
             console.error('Wallet error:', e);
@@ -1033,68 +1187,158 @@
         });
     }
 
-    function applyPromoCode() {
+    async function applyPromoCode() {
         const code = document.getElementById('promo-code-input').value.trim().toUpperCase();
         const msg = document.getElementById('promo-msg');
 
-        const validCodes = {
-            'URBAN50': '50% off applied!',
-            'WEEKEND20': '20% off applied!',
-            'MOTO30': '₹30 off applied!',
-            'NEWUSER': 'Welcome bonus applied!'
-        };
-
-        if (validCodes[code]) {
-            msg.textContent = '✓ ' + validCodes[code];
-            msg.style.color = '#2e7d32';
-            msg.className = 'promo-message success';
-            localStorage.setItem('active_promo', code);
-        } else if (code === '') {
+        if (!code) {
             msg.textContent = 'Please enter a promo code';
             msg.style.color = '#c62828';
-            msg.className = 'promo-message error';
-        } else {
-            msg.textContent = '✗ Invalid promo code';
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/promo/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code, ride_amount: 100 })
+            });
+            const data = await response.json();
+
+            if (data.status === 'ok') {
+                msg.textContent = '✓ ' + data.message;
+                msg.style.color = '#2e7d32';
+                localStorage.setItem('active_promo', code);
+            } else {
+                msg.textContent = '✗ ' + data.message;
+                msg.style.color = '#c62828';
+            }
+        } catch (e) {
+            msg.textContent = 'Error validating code';
             msg.style.color = '#c62828';
-            msg.className = 'promo-message error';
+        }
+    }
+
+    // Load available promos
+    async function loadPromos() {
+        try {
+            const response = await fetch('/api/promo/list');
+            const data = await response.json();
+            // Promos are hardcoded in HTML for now, but this could dynamically populate
+            console.log('Available promos:', data.promos);
+        } catch (e) {
+            console.error('Error loading promos:', e);
         }
     }
 
     // Saved Places Functions
-    function editPlace(type) {
+    async function editPlace(type) {
         const address = prompt(`Enter your ${type} address:`);
         if (address && address.trim()) {
-            document.getElementById(type + '-address').textContent = address;
-            localStorage.setItem('saved_' + type, address);
+            try {
+                const response = await fetch(`/api/user/${user.id}/places`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: type.charAt(0).toUpperCase() + type.slice(1),
+                        address: address,
+                        place_type: type
+                    })
+                });
+                const data = await response.json();
+                if (data.status === 'ok') {
+                    document.getElementById(type + '-address').textContent = address;
+                }
+            } catch (e) {
+                console.error('Error saving place:', e);
+            }
         }
     }
 
-    function loadSavedPlaces() {
-        const home = localStorage.getItem('saved_home');
-        const work = localStorage.getItem('saved_work');
-        if (home) document.getElementById('home-address').textContent = home;
-        if (work) document.getElementById('work-address').textContent = work;
+    async function loadSavedPlaces() {
+        if (!user) return;
+        try {
+            const response = await fetch(`/api/user/${user.id}/places`);
+            const data = await response.json();
+            if (data.status === 'ok') {
+                data.places.forEach(place => {
+                    if (place.place_type === 'home') {
+                        document.getElementById('home-address').textContent = place.address;
+                    } else if (place.place_type === 'work') {
+                        document.getElementById('work-address').textContent = place.address;
+                    }
+                });
+
+                // Add custom places to list
+                const customPlaces = data.places.filter(p => p.place_type === 'custom');
+                const list = document.getElementById('saved-places-list');
+                customPlaces.forEach(place => {
+                    const item = document.createElement('div');
+                    item.className = 'saved-place-item';
+                    item.dataset.id = place.id;
+                    item.innerHTML = `
+                        <div class="place-icon custom"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="place-info">
+                            <h4>${place.name}</h4>
+                            <p>${place.address}</p>
+                        </div>
+                        <button class="place-edit-btn" onclick="deletePlace(${place.id}, this)"><i class="fas fa-trash"></i></button>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+        } catch (e) {
+            console.error('Error loading places:', e);
+        }
     }
 
-    function addNewPlace() {
+    async function addNewPlace() {
         const name = prompt('Enter place name (e.g., Gym, School):');
         if (!name) return;
 
         const address = prompt('Enter the address:');
         if (!address) return;
 
-        const list = document.getElementById('saved-places-list');
-        const item = document.createElement('div');
-        item.className = 'saved-place-item';
-        item.innerHTML = `
-            <div class="place-icon custom"><i class="fas fa-map-marker-alt"></i></div>
-            <div class="place-info">
-                <h4>${name}</h4>
-                <p>${address}</p>
-            </div>
-            <button class="place-edit-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
-        `;
-        list.appendChild(item);
+        try {
+            const response = await fetch(`/api/user/${user.id}/places`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, address: address, place_type: 'custom' })
+            });
+            const data = await response.json();
+            if (data.status === 'ok') {
+                const list = document.getElementById('saved-places-list');
+                const item = document.createElement('div');
+                item.className = 'saved-place-item';
+                item.dataset.id = data.place_id;
+                item.innerHTML = `
+                    <div class="place-icon custom"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="place-info">
+                        <h4>${name}</h4>
+                        <p>${address}</p>
+                    </div>
+                    <button class="place-edit-btn" onclick="deletePlace(${data.place_id}, this)"><i class="fas fa-trash"></i></button>
+                `;
+                list.appendChild(item);
+            }
+        } catch (e) {
+            console.error('Error adding place:', e);
+        }
+    }
+
+    async function deletePlace(placeId, btn) {
+        if (!confirm('Delete this place?')) return;
+        try {
+            const response = await fetch(`/api/user/${user.id}/places/${placeId}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            if (data.status === 'ok') {
+                btn.closest('.saved-place-item').remove();
+            }
+        } catch (e) {
+            console.error('Error deleting place:', e);
+        }
     }
 
     // Support Functions
@@ -1197,7 +1441,7 @@
         document.getElementById('feedback-text').value = '';
     }
 
-    function submitRating() {
+    async function submitRating() {
         const feedback = document.getElementById('feedback-text').value;
 
         if (selectedRating === 0) {
@@ -1205,10 +1449,33 @@
             return;
         }
 
-        // In a real app, send to server
-        console.log('Rating:', selectedRating, 'Tip:', selectedTip, 'Feedback:', feedback);
+        // Get the current ride ID (would be stored when ride completes)
+        const currentRideId = localStorage.getItem('current_ride_id');
 
-        alert('Thank you for your feedback!');
+        if (currentRideId) {
+            try {
+                const response = await fetch(`/api/rides/${currentRideId}/rating`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        stars: selectedRating,
+                        feedback: feedback,
+                        tip: selectedTip
+                    })
+                });
+                const data = await response.json();
+                if (data.status === 'ok') {
+                    alert('Thank you for your feedback!');
+                    localStorage.removeItem('current_ride_id');
+                }
+            } catch (e) {
+                console.error('Error submitting rating:', e);
+                alert('Thank you for your feedback!');
+            }
+        } else {
+            alert('Thank you for your feedback!');
+        }
+
         closeRatingModal();
     }
 
