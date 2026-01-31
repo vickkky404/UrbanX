@@ -49,6 +49,19 @@ header {
     z-index: 1000;
 }
 
+/* Captain Link in Nav */
+.captain-link {
+    background: #22c55e !important;
+    color: #fff !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+}
+
+.captain-link:hover {
+    background: #16a34a !important;
+}
+
 .header-content {
     display: flex;
     align-items: center;
@@ -191,6 +204,114 @@ footer {
     text-align: center;
     padding: 40px 20px;
     margin-top: 60px;
+}
+
+/* Captain CTA Section */
+.captain-cta {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    padding: 60px 40px;
+    margin-top: 60px;
+    border-radius: 16px;
+}
+
+.captain-cta-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.captain-cta-text {
+    flex: 1;
+}
+
+.captain-cta-text h2 {
+    color: #fff;
+    font-size: 32px;
+    margin: 0 0 16px 0;
+}
+
+.captain-cta-text p {
+    color: #999;
+    font-size: 16px;
+    margin: 0 0 24px 0;
+    line-height: 1.6;
+}
+
+.captain-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+}
+
+.captain-benefits li {
+    color: #ccc;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.captain-benefits li i {
+    color: #22c55e;
+    font-size: 12px;
+}
+
+.btn-captain {
+    background: #22c55e !important;
+    color: #fff !important;
+}
+
+.btn-captain:hover {
+    background: #16a34a !important;
+}
+
+.captain-cta-image {
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.captain-cta-image i {
+    font-size: 80px;
+    color: #22c55e;
+}
+
+@media (max-width: 768px) {
+    .captain-cta {
+        padding: 40px 20px;
+    }
+
+    .captain-cta-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .captain-cta-text h2 {
+        font-size: 24px;
+    }
+
+    .captain-benefits {
+        display: inline-block;
+        text-align: left;
+    }
+
+    .captain-cta-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .captain-cta-image i {
+        font-size: 50px;
+    }
 }
     padding: 60px 20px;
     margin-top: 80px;
@@ -1059,6 +1180,17 @@ footer {
 .sidebar ul li a.active {
     background: rgba(255,255,255,0.1);
     color: #fff;
+}
+
+.sidebar ul li a.captain-switch {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e !important;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    margin-top: 10px;
+}
+
+.sidebar ul li a.captain-switch:hover {
+    background: rgba(34, 197, 94, 0.25);
 }
 
 .sidebar ul li a i {
@@ -2325,6 +2457,296 @@ footer {
     background: #eff6ff;
 }
 
+/* Captain Promo Box on Auth Pages */
+.captain-promo-box {
+    background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.captain-promo-box p {
+    color: rgba(255,255,255,0.9);
+    margin: 0 0 12px 0;
+    font-size: 14px;
+}
+
+.captain-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: #065f46;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.15s ease;
+}
+
+.captain-link-btn:hover {
+    background: #f0fdf4;
+}
+
+/* ========================================
+   CAPTAIN SIGNUP FORM STYLES
+   ======================================== */
+.captain-signup-card {
+    max-width: 600px;
+}
+
+.auth-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin: -8px 0 24px 0;
+    text-align: center;
+}
+
+.form-section {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.section-label i {
+    color: #666;
+    width: 20px;
+}
+
+.auth-row-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Age Notice */
+.age-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 16px;
+}
+
+.age-notice i {
+    color: #f59e0b;
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.age-notice strong {
+    display: block;
+    color: #92400e;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.age-notice p {
+    margin: 0;
+    font-size: 12px;
+    color: #a16207;
+    line-height: 1.5;
+}
+
+/* Gender Notice */
+.gender-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 16px;
+}
+
+.gender-notice i {
+    color: #3b82f6;
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.gender-notice strong {
+    display: block;
+    color: #1e40af;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.gender-notice p {
+    margin: 0;
+    font-size: 12px;
+    color: #1d4ed8;
+    line-height: 1.5;
+}
+
+/* Document Upload Grid */
+.document-upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.document-upload-item {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.document-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+}
+
+.document-label i {
+    color: #666;
+}
+
+.required-badge {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.required-badge.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 16px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.upload-box:hover {
+    border-color: #1a1a1a;
+    background: #fafafa;
+}
+
+.upload-box.has-file {
+    border-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.upload-box i {
+    font-size: 24px;
+    color: #999;
+}
+
+.upload-box span {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+.upload-hint {
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #999;
+}
+
+/* Terms Checkbox */
+.terms-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 14px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.terms-checkbox input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.terms-checkbox label {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.terms-checkbox label a {
+    color: #1a1a1a;
+    text-decoration: underline;
+}
+
+/* Switch Auth */
+.switch-auth {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.switch-auth a {
+    color: #1a1a1a;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.switch-auth a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive for Captain Signup */
+@media (max-width: 600px) {
+    .auth-row-group {
+        grid-template-columns: 1fr;
+    }
+
+    .document-upload-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .captain-signup-card {
+        max-width: 100%;
+    }
+}
+
 @media (max-width: 720px) {
     .auth-header {
         flex-direction: column;
@@ -3200,6 +3622,743 @@ footer {
         left: 12px;
         right: 12px;
         max-width: none;
+    }
+}
+
+/* ========================================
+   CAPTAIN DASHBOARD STYLES
+   ======================================== */
+.captain-app {
+    background: #f8f9fa;
+}
+
+.captain-sidebar {
+    background: #1a1a1a;
+    position: relative;
+}
+
+.captain-badge {
+    background: #22c55e;
+    color: #fff;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.captain-profile-card {
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.captain-avatar {
+    width: 48px;
+    height: 48px;
+    background: #3a3a3a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #999;
+}
+
+.captain-info h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #fff;
+}
+
+.captain-info p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #999;
+}
+
+.captain-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #fbbf24;
+}
+
+.online-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2a2a2a;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.online-toggle span {
+    color: #999;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #444;
+    border-radius: 26px;
+    transition: 0.3s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+input:checked + .toggle-slider {
+    background: #22c55e;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+}
+
+/* Captain Main Area */
+.captain-main {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.captain-section {
+    height: 100%;
+    overflow-y: auto;
+}
+
+#captain-map {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+}
+
+/* Captain Stats Bar */
+.captain-stats-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 24px;
+    display: flex;
+    gap: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+}
+
+/* Ride Requests Panel */
+.ride-requests-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.ride-requests-panel h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ride-requests-panel h3 i {
+    color: #f59e0b;
+}
+
+.request-card {
+    background: #f8f8f8;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.request-fare {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.fare-amount {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.fare-distance {
+    background: #e5e5e5;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    color: #666;
+}
+
+.request-route {
+    margin-bottom: 16px;
+}
+
+.route-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.route-point i {
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.route-point.pickup i { color: #22c55e; }
+.route-point.dropoff i { color: #ef4444; }
+
+.route-point span {
+    font-size: 14px;
+    color: #444;
+}
+
+.route-line {
+    width: 2px;
+    height: 20px;
+    background: #ddd;
+    margin-left: 4px;
+}
+
+.request-timer {
+    height: 4px;
+    background: #e5e5e5;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.timer-bar {
+    height: 100%;
+    background: #f59e0b;
+    width: 100%;
+    animation: timerCountdown 15s linear forwards;
+}
+
+@keyframes timerCountdown {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+.request-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.reject-btn, .accept-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.reject-btn {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.reject-btn:hover {
+    background: #eee;
+}
+
+.accept-btn {
+    background: #22c55e;
+    color: #fff;
+}
+
+.accept-btn:hover {
+    background: #16a34a;
+}
+
+/* Active Ride Panel */
+.active-ride-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.active-ride-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.active-ride-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.ride-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.ride-user-info .user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #e5e5e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.ride-user-info h4 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.ride-user-info p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #999;
+}
+
+.call-btn {
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.ride-route {
+    margin-bottom: 16px;
+}
+
+.ride-fare {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f0fdf4;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.ride-fare span {
+    color: #666;
+    font-size: 14px;
+}
+
+.ride-fare strong {
+    font-size: 20px;
+    color: #22c55e;
+}
+
+.active-ride-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn-secondary {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-btn-primary {
+    flex: 2;
+    padding: 14px;
+    border: none;
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.action-btn-primary:hover {
+    background: #333;
+}
+
+/* No Requests State */
+.no-requests {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    z-index: 1000;
+    text-align: center;
+}
+
+.no-requests i {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 16px;
+}
+
+.no-requests h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #1a1a1a;
+}
+
+.no-requests p {
+    margin: 0;
+    color: #999;
+    font-size: 14px;
+}
+
+/* Captain Rides Stats */
+.captain-rides-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* Earnings Card */
+.earnings-card {
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.earnings-balance .label {
+    color: #999;
+    font-size: 14px;
+}
+
+.earnings-balance h1 {
+    margin: 8px 0 24px;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.withdraw-btn {
+    background: #fff;
+    color: #1a1a1a;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.withdraw-btn:hover {
+    background: #f5f5f5;
+}
+
+/* Earnings Breakdown */
+.earnings-breakdown {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.earnings-breakdown h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #1a1a1a;
+}
+
+.breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.breakdown-item {
+    text-align: center;
+}
+
+.breakdown-label {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 4px;
+}
+
+.breakdown-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Profile Card */
+.profile-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.profile-header-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-avatar-large {
+    width: 64px;
+    height: 64px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #999;
+}
+
+.profile-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1a1a1a;
+}
+
+.profile-info p {
+    margin: 4px 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #1a1a1a;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 14px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #333;
+}
+
+/* Section Header */
+.section-header {
+    padding: 24px;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #1a1a1a;
+}
+
+/* Captain sections padding */
+#captain-rides-section,
+#captain-earnings-section,
+#captain-profile-section {
+    padding: 24px;
+    background: #f8f9fa;
+}
+
+/* Mobile Captain Dashboard */
+@media (max-width: 900px) {
+    .captain-sidebar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        padding: 8px 0;
+        flex-direction: row;
+    }
+
+    .captain-sidebar .sidebar-header,
+    .captain-sidebar .captain-profile-card,
+    .captain-sidebar .online-toggle {
+        display: none;
+    }
+
+    .captain-sidebar ul {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .captain-sidebar ul li a {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 10px;
+        padding: 8px;
+    }
+
+    .captain-main {
+        padding-bottom: 70px;
+    }
+
+    .captain-stats-bar {
+        top: 10px;
+        padding: 10px 16px;
+        gap: 20px;
+    }
+
+    .stat-value {
+        font-size: 16px;
+    }
+
+    .ride-requests-panel,
+    .active-ride-panel,
+    .no-requests {
+        bottom: 80px;
+        left: 12px;
+        right: 12px;
+    }
+
+    .captain-rides-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .breakdown-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .earnings-balance h1 {
+        font-size: 36px;
     }
 }
 

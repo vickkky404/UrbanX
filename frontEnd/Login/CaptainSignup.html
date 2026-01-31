@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>UrbanX - Captain Signup</title>
     <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="auth-page">
 <header class="auth-header">
     <div class="auth-brand">
         <div class="auth-logo" aria-hidden="true">UX</div>
-        <div class="auth-name">UrbanX</div>
+        <div class="auth-name">UrbanX Captain</div>
     </div>
     <div class="auth-actions" aria-label="Authentication navigation">
         <a class="auth-tab" href="CaptainLogin.html">Login</a>
@@ -18,48 +19,315 @@
 </header>
 <main class="auth-main">
     <div class="auth-shell">
-        <div class="auth-card">
+        <div class="auth-card captain-signup-card">
             <div class="auth-panel">
                 <div class="auth-panel-title">Become a Captain</div>
+                <p class="auth-subtitle">Join our team and start earning on your own schedule</p>
+
                 <form id="signupForm">
-                    <div class="auth-row">
-                        <label class="auth-label" for="fullname">Full Name</label>
-                        <input class="auth-input" type="text" id="fullname" name="fullname" placeholder="Enter your name" required>
+                    <!-- Step 1: Personal Info -->
+                    <div class="form-section">
+                        <h4 class="section-label"><i class="fas fa-user"></i> Personal Information</h4>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="fullname">Full Name (as per ID)</label>
+                            <input class="auth-input" type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="email">Email Address</label>
+                            <input class="auth-input" type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="phone">Phone Number</label>
+                            <input class="auth-input" type="tel" id="phone" name="phone" placeholder="+91 XXXXX XXXXX" required>
+                        </div>
+
+                        <div class="auth-row-group">
+                            <div class="auth-row">
+                                <label class="auth-label" for="age">Age</label>
+                                <input class="auth-input" type="number" id="age" name="age" min="16" max="65" placeholder="Your age" required onchange="checkAgeRequirements()">
+                            </div>
+                            <div class="auth-row">
+                                <label class="auth-label" for="gender">Gender</label>
+                                <select class="auth-input" id="gender" name="gender" required>
+                                    <option value="" disabled selected>Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Age Notice -->
+                        <div id="age-notice" class="age-notice" style="display: none;">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>Age Verification Required</strong>
+                                <p>Since you are between 16-21 years old, you must upload valid age identification documents to verify your eligibility to drive on Indian roads.</p>
+                            </div>
+                        </div>
+
+                        <!-- Gender Matching Notice -->
+                        <div class="gender-notice">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <strong>Secure Transportation Policy</strong>
+                                <p>For passenger safety, male captains will be matched with male passengers and female captains with female passengers.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="auth-row">
-                        <label class="auth-label" for="email">Email</label>
-                        <input class="auth-input" type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                    <!-- Step 2: Vehicle Info -->
+                    <div class="form-section">
+                        <h4 class="section-label"><i class="fas fa-car"></i> Vehicle Information</h4>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="vehicle_type">Vehicle Type</label>
+                            <select class="auth-input" id="vehicle_type" name="vehicle_type" required>
+                                <option value="" disabled selected>Select your vehicle</option>
+                                <option value="Cycle">Cycle (Age 16+)</option>
+                                <option value="Bike">Bike (Age 18+)</option>
+                                <option value="Auto">Auto (Age 18+)</option>
+                                <option value="Cab">Cab (Age 21+)</option>
+                            </select>
+                        </div>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="vehicle_number">Vehicle Registration Number</label>
+                            <input class="auth-input" type="text" id="vehicle_number" name="vehicle_number" placeholder="e.g., MH 01 AB 1234">
+                        </div>
                     </div>
-                    <div class="auth-row">
-                        <label class="auth-label" for="age">Age</label>
-                        <input class="auth-input" type="number" id="age" name="age" min="18" placeholder="Must be 18+" required>
+
+                    <!-- Step 3: Documents -->
+                    <div class="form-section">
+                        <h4 class="section-label"><i class="fas fa-file-alt"></i> Documents</h4>
+
+                        <div class="document-upload-grid">
+                            <!-- Aadhaar Card -->
+                            <div class="document-upload-item">
+                                <label class="document-label">
+                                    <i class="fas fa-id-card"></i>
+                                    <span>Aadhaar Card</span>
+                                    <span class="required-badge">Required</span>
+                                </label>
+                                <div class="upload-box" onclick="document.getElementById('aadhaar_doc').click()">
+                                    <input type="file" id="aadhaar_doc" name="aadhaar_doc" accept="image/*,.pdf" hidden onchange="showFileName(this, 'aadhaar_preview')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span id="aadhaar_preview">Click to upload</span>
+                                </div>
+                            </div>
+
+                            <!-- Driving License (for 18+) -->
+                            <div class="document-upload-item" id="dl-upload">
+                                <label class="document-label">
+                                    <i class="fas fa-car"></i>
+                                    <span>Driving License</span>
+                                    <span class="required-badge" id="dl-required">Required for 18+</span>
+                                </label>
+                                <div class="upload-box" onclick="document.getElementById('driving_license').click()">
+                                    <input type="file" id="driving_license" name="driving_license" accept="image/*,.pdf" hidden onchange="showFileName(this, 'dl_preview')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span id="dl_preview">Click to upload</span>
+                                </div>
+                            </div>
+
+                            <!-- Age Proof (for 16-21) -->
+                            <div class="document-upload-item" id="age-proof-upload" style="display: none;">
+                                <label class="document-label">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    <span>Age Proof Document</span>
+                                    <span class="required-badge warning">Required for 16-21</span>
+                                </label>
+                                <div class="upload-box" onclick="document.getElementById('age_proof').click()">
+                                    <input type="file" id="age_proof" name="age_proof" accept="image/*,.pdf" hidden onchange="showFileName(this, 'age_preview')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span id="age_preview">Birth Certificate / School ID</span>
+                                </div>
+                                <small class="upload-hint">Upload Birth Certificate, School ID, or Passport</small>
+                            </div>
+
+                            <!-- Guardian Consent (for minors 16-18) -->
+                            <div class="document-upload-item" id="guardian-consent-upload" style="display: none;">
+                                <label class="document-label">
+                                    <i class="fas fa-file-signature"></i>
+                                    <span>Guardian Consent</span>
+                                    <span class="required-badge warning">Required for 16-17</span>
+                                </label>
+                                <div class="upload-box" onclick="document.getElementById('guardian_consent').click()">
+                                    <input type="file" id="guardian_consent" name="guardian_consent" accept="image/*,.pdf" hidden onchange="showFileName(this, 'guardian_preview')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span id="guardian_preview">Upload signed consent form</span>
+                                </div>
+                                <small class="upload-hint">Parent/Guardian signed consent form with their ID</small>
+                            </div>
+
+                            <!-- Vehicle RC (for motor vehicles) -->
+                            <div class="document-upload-item" id="rc-upload" style="display: none;">
+                                <label class="document-label">
+                                    <i class="fas fa-file-invoice"></i>
+                                    <span>Vehicle RC</span>
+                                    <span class="required-badge">Required</span>
+                                </label>
+                                <div class="upload-box" onclick="document.getElementById('vehicle_rc').click()">
+                                    <input type="file" id="vehicle_rc" name="vehicle_rc" accept="image/*,.pdf" hidden onchange="showFileName(this, 'rc_preview')">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span id="rc_preview">Click to upload</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="auth-row">
-                        <label class="auth-label" for="vehicle_type">Vehicle Type</label>
-                        <select class="auth-input" id="vehicle_type" name="vehicle_type">
-                            <option value="" disabled selected>Select your vehicle</option>
-                            <option value="bike">Bike</option>
-                            <option value="auto">Auto</option>
-                            <option value="cab">Cab</option>
-                        </select>
+
+                    <!-- Step 4: Password -->
+                    <div class="form-section">
+                        <h4 class="section-label"><i class="fas fa-lock"></i> Account Security</h4>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="password">Password</label>
+                            <input class="auth-input" type="password" id="password" name="password" placeholder="Min. 8 characters" required>
+                        </div>
+
+                        <div class="auth-row">
+                            <label class="auth-label" for="confirm_password">Confirm Password</label>
+                            <input class="auth-input" type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                        </div>
                     </div>
-                    <div class="auth-row">
-                        <label class="auth-label" for="password">Password</label>
-                        <input class="auth-input" type="password" id="password" name="password" placeholder="Min. 8 characters" required>
+
+                    <!-- Terms -->
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm that all documents submitted are genuine and I am eligible to drive as per Indian traffic laws.</label>
                     </div>
-                    <button type="submit" class="auth-submit">Create Account</button>
+
+                    <button type="submit" class="auth-submit">
+                        <i class="fas fa-user-plus"></i> Create Captain Account
+                    </button>
+
                     <div id="message" class="auth-message"></div>
+
                     <p class="switch-auth">Already a Captain? <a href="CaptainLogin.html">Sign in</a></p>
                 </form>
             </div>
         </div>
     </div>
 </main>
+
 <script>
+    function checkAgeRequirements() {
+        const age = parseInt(document.getElementById('age').value);
+        const ageNotice = document.getElementById('age-notice');
+        const ageProofUpload = document.getElementById('age-proof-upload');
+        const guardianConsentUpload = document.getElementById('guardian-consent-upload');
+        const vehicleType = document.getElementById('vehicle_type');
+
+        // Show/hide age-related documents
+        if (age >= 16 && age <= 21) {
+            ageNotice.style.display = 'flex';
+            ageProofUpload.style.display = 'block';
+        } else {
+            ageNotice.style.display = 'none';
+            ageProofUpload.style.display = 'none';
+        }
+
+        // Guardian consent for minors (16-17)
+        if (age >= 16 && age < 18) {
+            guardianConsentUpload.style.display = 'block';
+        } else {
+            guardianConsentUpload.style.display = 'none';
+        }
+
+        // Update vehicle options based on age
+        updateVehicleOptions(age);
+    }
+
+    function updateVehicleOptions(age) {
+        const vehicleSelect = document.getElementById('vehicle_type');
+        const options = vehicleSelect.options;
+
+        for (let i = 0; i < options.length; i++) {
+            const opt = options[i];
+            if (opt.value === 'Cycle') {
+                opt.disabled = age < 16;
+            } else if (opt.value === 'Bike' || opt.value === 'Auto') {
+                opt.disabled = age < 18;
+            } else if (opt.value === 'Cab') {
+                opt.disabled = age < 21;
+            }
+        }
+    }
+
+    document.getElementById('vehicle_type').addEventListener('change', function() {
+        const rcUpload = document.getElementById('rc-upload');
+        const dlUpload = document.getElementById('dl-upload');
+        const vehicleNumber = document.getElementById('vehicle_number');
+
+        if (this.value === 'Cycle') {
+            rcUpload.style.display = 'none';
+            dlUpload.style.display = 'none';
+            vehicleNumber.required = false;
+            vehicleNumber.parentElement.style.display = 'none';
+        } else {
+            rcUpload.style.display = 'block';
+            dlUpload.style.display = 'block';
+            vehicleNumber.required = true;
+            vehicleNumber.parentElement.style.display = 'block';
+        }
+    });
+
+    function showFileName(input, previewId) {
+        const preview = document.getElementById(previewId);
+        if (input.files && input.files[0]) {
+            preview.textContent = input.files[0].name;
+            preview.style.color = '#22c55e';
+            input.parentElement.classList.add('has-file');
+        }
+    }
+
     document.getElementById('signupForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+        const messageDiv = document.getElementById('message');
+
+        // Validate passwords match
+        const pass = document.getElementById('password').value;
+        const confirmPass = document.getElementById('confirm_password').value;
+        if (pass !== confirmPass) {
+            messageDiv.style.color = 'red';
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = 'Passwords do not match';
+            return;
+        }
+
+        // Validate age requirements
+        const age = parseInt(document.getElementById('age').value);
+        const vehicleType = document.getElementById('vehicle_type').value;
+
+        if (vehicleType === 'Cab' && age < 21) {
+            messageDiv.style.color = 'red';
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = 'You must be 21+ to drive a Cab';
+            return;
+        }
+
+        if ((vehicleType === 'Bike' || vehicleType === 'Auto') && age < 18) {
+            messageDiv.style.color = 'red';
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = 'You must be 18+ to drive a Bike or Auto';
+            return;
+        }
+
+        // Collect form data
         const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
+        const data = {
+            fullname: formData.get('fullname'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            age: formData.get('age'),
+            gender: formData.get('gender'),
+            vehicle_type: formData.get('vehicle_type'),
+            vehicle_number: formData.get('vehicle_number'),
+            password: formData.get('password')
+        };
 
         try {
             const response = await fetch('/captain/signup', {
@@ -71,24 +339,28 @@
             });
 
             const result = await response.json();
-            const messageDiv = document.getElementById('message');
 
             if (response.ok) {
                 messageDiv.style.color = 'green';
-                messageDiv.textContent = 'Registration successful! Redirecting to login...';
+                messageDiv.style.display = 'block';
+                messageDiv.textContent = 'Registration successful! Your documents will be verified within 24-48 hours. Redirecting...';
                 setTimeout(() => {
                     window.location.href = 'CaptainLogin.html';
-                }, 1500);
+                }, 2000);
             } else {
                 messageDiv.style.color = 'red';
+                messageDiv.style.display = 'block';
                 messageDiv.textContent = result.message || 'Registration failed';
             }
         } catch (error) {
             console.error('Error:', error);
-            document.getElementById('message').textContent = 'An error occurred. Please try again.';
+            messageDiv.style.color = 'red';
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = 'An error occurred. Please try again.';
         }
     });
 </script>
+
 <footer>
     <p>&copy; 2026 UrbanX. All rights reserved.</p>
 </footer>

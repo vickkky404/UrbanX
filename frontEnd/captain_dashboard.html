@@ -3,395 +3,531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UrbanX Captain Dashboard</title>
+    <title>UrbanX - Captain Dashboard</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .app-container {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .sidebar {
-            width: 250px;
-            background: #1f2933;
-            color: white;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            z-index: 1001;
-        }
-        .sidebar h2 {
-            color: #38bdf8;
-            margin-bottom: 20px;
-        }
-        .captain-profile {
-            background: #334155;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        .captain-profile img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-        .captain-profile h3 {
-            margin: 0;
-            font-size: 18px;
-            color: white;
-        }
-        .captain-profile p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #94a3b8;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            flex: 1;
-        }
-        .sidebar ul li {
-            margin-bottom: 15px;
-        }
-        .sidebar ul li a {
-            color: #cbd5e1;
-            text-decoration: none;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 8px;
-            transition: background 0.3s;
-            gap: 10px;
-        }
-        .sidebar ul li a:hover, .sidebar ul li a.active {
-            background: #374151;
-            color: white;
-        }
-
-        .map-area {
-            flex: 1;
-            position: relative;
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .dashboard-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 350px;
-            pointer-events: none; /* Allow clicking map underneath */
-        }
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            pointer-events: auto;
-        }
-        .stats-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .stats-info h4 {
-            margin: 0;
-            color: #64748b;
-            font-size: 14px;
-        }
-        .stats-info .amount {
-            margin: 5px 0 0;
-            color: #0f172a;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .btn-cashout {
-            background: #22c55e;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .btn-cashout:hover {
-            background: #16a34a;
-        }
-
-        .status-toggle {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #38bdf8;
-        }
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        .ride-request-card h3 {
-            margin-top: 0;
-            color: #1e293b;
-        }
-        .ride-details {
-            margin: 15px 0;
-        }
-        .ride-location {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        .ride-location i {
-            margin-top: 3px;
-        }
-        .pickup i { color: #22c55e; }
-        .dropoff i { color: #ef4444; }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        /* Buttons are now handled globally in styles.css */
-
-
-        @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column-reverse;
-            }
-            .sidebar {
-                width: 100%;
-                height: 70px;
-                flex-direction: row;
-                padding: 0;
-                justify-content: space-around;
-                align-items: center;
-            }
-            .sidebar h2, .captain-profile, .sidebar .text {
-                display: none;
-            }
-            .sidebar ul {
-                display: flex;
-                width: 100%;
-                justify-content: space-around;
-                margin: 0;
-            }
-            .sidebar ul li { margin: 0; }
-            .sidebar ul li a {
-                flex-direction: column;
-                font-size: 10px;
-                gap: 5px;
-                padding: 8px;
-            }
-            .dashboard-overlay {
-                width: calc(100% - 40px);
-                top: 10px;
-                left: 20px;
-            }
-        }
-    </style>
 </head>
-<body>
+<body class="captain-app">
     <div class="app-container">
-        <aside class="sidebar">
-            <h2>UrbanX Captain</h2>
-
-            <div class="captain-profile">
-                <!-- <img src="https://via.placeholder.com/50" alt="Captain"> -->
-                <h3 id="captain-name">Loading...</h3>
-                <p id="vehicle-info">Vehicle Type: Cab</p>
-                <p style="font-size: 12px; margin-top: 5px; opacity: 0.7;">Age: 28</p>
+        <!-- Captain Sidebar -->
+        <div class="sidebar captain-sidebar">
+            <div class="sidebar-header">
+                <h2>UrbanX</h2>
+                <span class="captain-badge">Captain</span>
             </div>
 
-            <nav>
-                <ul>
-                    <li><a href="#" class="active"><i class="fas fa-home"></i> <span class="text">Dashboard</span></a></li>
-                    <li><a href="#"><i class="fas fa-history"></i> <span class="text">Rides</span></a></li>
-                    <li><a href="#"><i class="fas fa-wallet"></i> <span class="text">Earnings</span></a></li>
-                    <li><a href="#"><i class="fas fa-user"></i> <span class="text">Profile</span></a></li>
-                    <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span class="text">Logout</span></a></li>
-                </ul>
-            </nav>
-        </aside>
-
-        <main class="map-area">
-            <div id="map"></div>
-
-            <div class="dashboard-overlay">
-                <!-- Status Card -->
-                <div class="dashboard-card">
-                    <div class="status-toggle">
-                        <span style="font-weight: 600; color: #1e293b;">You are detailed as: <span id="status-text" style="color: #22c55e;">Online</span></span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked onchange="toggleStatus(this)">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
+            <div class="captain-profile-card">
+                <div class="captain-avatar">
+                    <i class="fas fa-user"></i>
                 </div>
-
-                <!-- Earnings Card -->
-                <div class="dashboard-card stats-card">
-                    <div class="stats-info">
-                        <h4>Total Income</h4>
-                        <p class="amount">₹ <span id="total-income">2,450.00</span></p>
-                    </div>
-                    <button class="btn-cashout" onclick="alert('Cashout feature coming soon!')">Cashout</button>
-                </div>
-
-                <!-- Upcoming Ride Request (Simulation) -->
-                <div class="dashboard-card ride-request-card" id="upcoming-ride">
-                    <h3>Upcoming Ride</h3>
-                    <div class="ride-details">
-                        <div class="ride-location pickup">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Central Mall, Gandhi Road</span>
-                        </div>
-                        <div class="ride-location dropoff">
-                            <i class="fas fa-location-arrow"></i>
-                            <span>Tech Park, Sector 5</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 14px; color: #64748b; margin-top: 10px;">
-                            <span><i class="fas fa-clock"></i> 2 mins away</span>
-                            <span style="color: #0f172a; font-weight: 600;">₹ 145.00</span>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn-reject" onclick="rejectRide()">Pass</button>
-                        <button class="btn-accept" onclick="acceptRide()">Accept Ride</button>
+                <div class="captain-info">
+                    <h3 id="captain-name">Loading...</h3>
+                    <p id="captain-vehicle"><i class="fas fa-car"></i> <span>-</span></p>
+                    <div class="captain-rating">
+                        <i class="fas fa-star"></i>
+                        <span id="captain-rating">4.8</span>
                     </div>
                 </div>
             </div>
-        </main>
+
+            <div class="online-toggle">
+                <span id="online-status">Go Online</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="online-toggle" onchange="toggleOnlineStatus()">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <ul>
+                <li><a href="#" class="active" onclick="showCaptainSection('dashboard', event)"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" onclick="showCaptainSection('rides', event); loadCaptainRides();"><i class="fas fa-route"></i> My Rides</a></li>
+                <li><a href="#" onclick="showCaptainSection('earnings', event); loadEarnings();"><i class="fas fa-wallet"></i> Earnings</a></li>
+                <li><a href="#" onclick="showCaptainSection('profile', event)"><i class="fas fa-user-cog"></i> Profile</a></li>
+                <li><a href="#" onclick="captainLogout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="captain-main">
+            <!-- Dashboard Section -->
+            <div id="captain-dashboard-section" class="captain-section">
+                <div id="captain-map"></div>
+
+                <!-- Earnings Overview -->
+                <div class="captain-stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-value">₹<span id="today-earnings">0</span></span>
+                        <span class="stat-label">Today</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="trips-today">0</span>
+                        <span class="stat-label">Trips</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="hours-online">0h</span>
+                        <span class="stat-label">Online</span>
+                    </div>
+                </div>
+
+                <!-- Ride Requests Panel -->
+                <div id="ride-requests-panel" class="ride-requests-panel" style="display: none;">
+                    <h3><i class="fas fa-bell"></i> New Ride Request</h3>
+                    <div id="ride-request-details"></div>
+                </div>
+
+                <!-- Active Ride Panel -->
+                <div id="active-ride-panel" class="active-ride-panel" style="display: none;">
+                    <div class="active-ride-header">
+                        <h3>Active Ride</h3>
+                        <span class="ride-status-badge" id="active-ride-status">In Progress</span>
+                    </div>
+                    <div class="active-ride-details">
+                        <div class="ride-user-info">
+                            <div class="user-avatar"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h4 id="rider-name">Rider</h4>
+                                <p id="rider-phone">Contact rider</p>
+                            </div>
+                            <button class="call-btn" onclick="callRider()"><i class="fas fa-phone"></i></button>
+                        </div>
+                        <div class="ride-route">
+                            <div class="route-point pickup">
+                                <i class="fas fa-circle"></i>
+                                <span id="active-pickup">Pickup location</span>
+                            </div>
+                            <div class="route-line"></div>
+                            <div class="route-point dropoff">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="active-dropoff">Drop-off location</span>
+                            </div>
+                        </div>
+                        <div class="ride-fare">
+                            <span>Fare</span>
+                            <strong>₹<span id="active-fare">0</span></strong>
+                        </div>
+                    </div>
+                    <div class="active-ride-actions">
+                        <button class="action-btn-secondary" onclick="navigateToPickup()"><i class="fas fa-directions"></i> Navigate</button>
+                        <button class="action-btn-primary" id="ride-action-btn" onclick="updateRideStatus()">Arrived at Pickup</button>
+                    </div>
+                </div>
+
+                <!-- No Requests State -->
+                <div id="no-requests" class="no-requests">
+                    <i class="fas fa-car-side"></i>
+                    <h3>Waiting for ride requests</h3>
+                    <p>New requests will appear here when you're online</p>
+                </div>
+            </div>
+
+            <!-- My Rides Section -->
+            <div id="captain-rides-section" class="captain-section" style="display: none;">
+                <div class="section-header">
+                    <h2>My Rides</h2>
+                </div>
+                <div class="captain-rides-stats">
+                    <div class="stat-card">
+                        <h4>Total Rides</h4>
+                        <p id="total-captain-rides">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Completed</h4>
+                        <p id="completed-rides">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Rating</h4>
+                        <p id="avg-rating">-</p>
+                    </div>
+                </div>
+                <div id="captain-rides-list" class="rides-list">
+                    <p class="empty-state">Loading rides...</p>
+                </div>
+            </div>
+
+            <!-- Earnings Section -->
+            <div id="captain-earnings-section" class="captain-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Earnings</h2>
+                </div>
+                <div class="earnings-card">
+                    <div class="earnings-balance">
+                        <span class="label">Available Balance</span>
+                        <h1>₹<span id="total-balance">0.00</span></h1>
+                    </div>
+                    <button class="withdraw-btn" onclick="withdrawEarnings()">
+                        <i class="fas fa-university"></i> Withdraw to Bank
+                    </button>
+                </div>
+                <div class="earnings-breakdown">
+                    <h3>This Week</h3>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Ride Earnings</span>
+                            <span class="breakdown-value" id="ride-earnings">₹0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Tips</span>
+                            <span class="breakdown-value" id="tip-earnings">₹0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Incentives</span>
+                            <span class="breakdown-value" id="incentive-earnings">₹0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="captain-profile-section" class="captain-section" style="display: none;">
+                <div class="section-header">
+                    <h2>Profile Settings</h2>
+                </div>
+                <div class="profile-card">
+                    <div class="profile-header-card">
+                        <div class="profile-avatar-large">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="profile-name">Captain Name</h3>
+                            <p id="profile-email">email@example.com</p>
+                        </div>
+                    </div>
+                    <form id="captain-profile-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="edit-name" placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Vehicle Type</label>
+                            <select id="edit-vehicle">
+                                <option value="bike">Bike</option>
+                                <option value="auto">Auto</option>
+                                <option value="cab">Cab</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script>
-        // Check Auth
-        // const userType = localStorage.getItem('userType');
-        // if (userType !== 'captain') {
-        //     window.location.href = 'Login/CaptainLogin.html';
-        // }
-
-        // Initialize Map
-        const map = L.map('map').setView([12.9716, 77.5946], 13); // Default to Bangalore
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        }).addTo(map);
-
-        // Get Current Location
-        if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(position => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                // Update map view and marker (simulation)
-                // map.setView([lat, lng], 15);
-            }, error => {
-                console.error("Location access denied or error", error);
-            });
+        // Auth Check
+        const captain = JSON.parse(localStorage.getItem('urbx_captain'));
+        if (!captain) {
+            window.location.href = 'Login/CaptainLogin.html';
         }
 
-        // --- Mock Data Loading ---
-        // In a real app, fetch this from backend
-        // document.getElementById('captain-name').textContent = "Rajesh Kumar"; // Example
+        let map;
+        let isOnline = false;
+        let currentRide = null;
+        let rideStatus = 'none';
+        let pendingRequests = [];
 
-        function toggleStatus(checkbox) {
-            const statusText = document.getElementById('status-text');
-            if (checkbox.checked) {
-                statusText.textContent = "Online";
-                statusText.style.color = "#22c55e"; // Green
-                document.getElementById('upcoming-ride').style.display = 'block';
-            } else {
-                statusText.textContent = "Offline";
-                statusText.style.color = "#94a3b8"; // Gray
-                document.getElementById('upcoming-ride').style.display = 'none';
+        function initCaptainDashboard() {
+            document.getElementById('captain-name').textContent = captain.name || 'Captain';
+            document.getElementById('captain-vehicle').querySelector('span').textContent = captain.vehicle_type || 'Cab';
+            document.getElementById('profile-name').textContent = captain.name || 'Captain';
+            document.getElementById('profile-email').textContent = captain.email || '';
+            document.getElementById('edit-name').value = captain.name || '';
+            document.getElementById('total-balance').textContent = (captain.total_earnings || 0).toFixed(2);
+            initMap();
+            loadCaptainStats();
+        }
+
+        function initMap() {
+            map = L.map('captain-map').setView([12.9716, 77.5946], 14);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19
+            }).addTo(map);
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const { latitude, longitude } = pos.coords;
+                    map.setView([latitude, longitude], 15);
+                    L.marker([latitude, longitude]).addTo(map).bindPopup('You are here').openPopup();
+                });
             }
         }
 
-        function acceptRide() {
-            alert("You accepted the ride! Navigation starting...");
-            // Logic to update ride status to 'accepted'
+        function toggleOnlineStatus() {
+            isOnline = document.getElementById('online-toggle').checked;
+            const statusText = document.getElementById('online-status');
+
+            if (isOnline) {
+                statusText.textContent = 'Online';
+                statusText.style.color = '#22c55e';
+                document.getElementById('no-requests').querySelector('p').textContent = 'Waiting for ride requests...';
+                startPollingRequests();
+            } else {
+                statusText.textContent = 'Offline';
+                statusText.style.color = '#999';
+                document.getElementById('no-requests').querySelector('p').textContent = 'Go online to receive ride requests';
+                document.getElementById('ride-requests-panel').style.display = 'none';
+                document.getElementById('no-requests').style.display = 'block';
+            }
         }
 
-        function rejectRide() {
-            document.getElementById('upcoming-ride').style.display = 'none';
-            setTimeout(() => {
-                // Show another ride after delay
-                document.getElementById('upcoming-ride').style.display = 'block';
+        function startPollingRequests() {
+            fetchRideRequests();
+            setInterval(() => {
+                if (isOnline && !currentRide) fetchRideRequests();
             }, 5000);
         }
 
-        function logout() {
+        async function fetchRideRequests() {
+            try {
+                const response = await fetch(`/api/captain/rides/pending?vehicle_type=${captain.vehicle_type}`);
+                const data = await response.json();
+                if (data.status === 'ok' && data.rides.length > 0) {
+                    showRideRequest(data.rides[0]);
+                }
+            } catch (e) {
+                simulateRideRequest();
+            }
+        }
+
+        function simulateRideRequest() {
+            if (!isOnline || currentRide) return;
+            if (Math.random() > 0.7) {
+                const mockRide = {
+                    id: Math.floor(Math.random() * 1000),
+                    pickup: 'Central Mall, MG Road',
+                    dropoff: 'Tech Park, Whitefield',
+                    fare: Math.floor(Math.random() * 200) + 50,
+                    distance_km: (Math.random() * 10 + 2).toFixed(1),
+                    vehicle_type: captain.vehicle_type
+                };
+                showRideRequest(mockRide);
+            }
+        }
+
+        function showRideRequest(ride) {
+            pendingRequests = [ride];
+            document.getElementById('no-requests').style.display = 'none';
+            document.getElementById('ride-requests-panel').style.display = 'block';
+
+            document.getElementById('ride-request-details').innerHTML = `
+                <div class="request-card">
+                    <div class="request-fare">
+                        <span class="fare-amount">₹${ride.fare}</span>
+                        <span class="fare-distance">${ride.distance_km} km</span>
+                    </div>
+                    <div class="request-route">
+                        <div class="route-point pickup">
+                            <i class="fas fa-circle"></i>
+                            <span>${ride.pickup}</span>
+                        </div>
+                        <div class="route-line"></div>
+                        <div class="route-point dropoff">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${ride.dropoff}</span>
+                        </div>
+                    </div>
+                    <div class="request-timer"><div class="timer-bar"></div></div>
+                    <div class="request-actions">
+                        <button class="reject-btn" onclick="rejectRide(${ride.id})"><i class="fas fa-times"></i> Decline</button>
+                        <button class="accept-btn" onclick="acceptRide(${ride.id})"><i class="fas fa-check"></i> Accept</button>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                if (pendingRequests.find(r => r.id === ride.id)) rejectRide(ride.id);
+            }, 15000);
+        }
+
+        async function acceptRide(rideId) {
+            const ride = pendingRequests.find(r => r.id === rideId);
+            if (!ride) return;
+
+            try {
+                await fetch(`/api/captain/rides/${rideId}/accept`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ captain_id: captain.id })
+                });
+            } catch (e) {}
+
+            currentRide = ride;
+            rideStatus = 'accepted';
+            showActiveRide();
+            pendingRequests = [];
+            document.getElementById('ride-requests-panel').style.display = 'none';
+        }
+
+        function rejectRide(rideId) {
+            pendingRequests = pendingRequests.filter(r => r.id !== rideId);
+            document.getElementById('ride-requests-panel').style.display = 'none';
+            document.getElementById('no-requests').style.display = 'block';
+        }
+
+        function showActiveRide() {
+            document.getElementById('no-requests').style.display = 'none';
+            document.getElementById('active-ride-panel').style.display = 'block';
+            document.getElementById('active-pickup').textContent = currentRide.pickup;
+            document.getElementById('active-dropoff').textContent = currentRide.dropoff;
+            document.getElementById('active-fare').textContent = currentRide.fare;
+            updateRideActionButton();
+        }
+
+        function updateRideActionButton() {
+            const btn = document.getElementById('ride-action-btn');
+            const statusBadge = document.getElementById('active-ride-status');
+
+            switch (rideStatus) {
+                case 'accepted':
+                    btn.textContent = 'Arrived at Pickup';
+                    statusBadge.textContent = 'Heading to Pickup';
+                    break;
+                case 'arrived':
+                    btn.textContent = 'Start Ride';
+                    statusBadge.textContent = 'At Pickup';
+                    break;
+                case 'started':
+                    btn.textContent = 'Complete Ride';
+                    statusBadge.textContent = 'In Progress';
+                    break;
+            }
+        }
+
+        async function updateRideStatus() {
+            const statusFlow = ['accepted', 'arrived', 'started', 'completed'];
+            const currentIndex = statusFlow.indexOf(rideStatus);
+
+            if (currentIndex < statusFlow.length - 1) {
+                rideStatus = statusFlow[currentIndex + 1];
+                if (rideStatus === 'completed') {
+                    await completeRide();
+                } else {
+                    updateRideActionButton();
+                }
+            }
+        }
+
+        async function completeRide() {
+            try {
+                await fetch(`/api/captain/rides/${currentRide.id}/complete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ captain_id: captain.id })
+                });
+            } catch (e) {}
+
+            const currentEarnings = parseFloat(document.getElementById('today-earnings').textContent) || 0;
+            document.getElementById('today-earnings').textContent = (currentEarnings + currentRide.fare).toFixed(0);
+
+            const totalBalance = parseFloat(document.getElementById('total-balance').textContent) || 0;
+            document.getElementById('total-balance').textContent = (totalBalance + currentRide.fare).toFixed(2);
+
+            const tripsToday = parseInt(document.getElementById('trips-today').textContent) || 0;
+            document.getElementById('trips-today').textContent = tripsToday + 1;
+
+            alert('Ride completed! ₹' + currentRide.fare + ' added to your earnings.');
+
+            currentRide = null;
+            rideStatus = 'none';
+            document.getElementById('active-ride-panel').style.display = 'none';
+            document.getElementById('no-requests').style.display = 'block';
+        }
+
+        function navigateToPickup() {
+            if (currentRide) {
+                const destination = encodeURIComponent(currentRide.pickup);
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${destination}`, '_blank');
+            }
+        }
+
+        function callRider() { alert('Calling rider...'); }
+
+        function showCaptainSection(sectionId, event) {
+            if (event) event.preventDefault();
+            document.querySelectorAll('.captain-section').forEach(s => s.style.display = 'none');
+            document.getElementById('captain-' + sectionId + '-section').style.display = 'block';
+            document.querySelectorAll('.captain-sidebar ul a').forEach(a => a.classList.remove('active'));
+            if (event) event.target.closest('a').classList.add('active');
+            if (sectionId === 'dashboard' && map) setTimeout(() => map.invalidateSize(), 100);
+        }
+
+        async function loadCaptainStats() {
+            try {
+                const response = await fetch(`/api/captain/${captain.id}/stats`);
+                const data = await response.json();
+                if (data.status === 'ok') {
+                    document.getElementById('today-earnings').textContent = data.stats.today_earnings || 0;
+                    document.getElementById('trips-today').textContent = data.stats.trips_today || 0;
+                }
+            } catch (e) {}
+        }
+
+        async function loadCaptainRides() {
+            const list = document.getElementById('captain-rides-list');
+            list.innerHTML = '<p class="empty-state">Loading...</p>';
+
+            try {
+                const response = await fetch(`/api/captain/${captain.id}/rides`);
+                const data = await response.json();
+
+                if (data.status === 'ok' && data.rides.length > 0) {
+                    document.getElementById('total-captain-rides').textContent = data.rides.length;
+                    document.getElementById('completed-rides').textContent = data.rides.filter(r => r.status === 'completed').length;
+
+                    list.innerHTML = data.rides.map(ride => `
+                        <div class="ride-item">
+                            <div class="ride-header">
+                                <span class="ride-id">Ride #${ride.id}</span>
+                                <span class="ride-status-badge ${ride.status}">${ride.status}</span>
+                            </div>
+                            <div class="ride-detail-row">
+                                <i class="fas fa-map-marker-alt" style="color:#22c55e"></i>
+                                <span>${ride.pickup}</span>
+                            </div>
+                            <div class="ride-detail-row">
+                                <i class="fas fa-map-pin" style="color:#ef4444"></i>
+                                <span>${ride.dropoff}</span>
+                            </div>
+                            <div class="ride-meta">
+                                <span>₹${ride.fare || 0}</span>
+                                <span>${new Date(ride.created_at).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<p class="empty-state">No rides yet. Go online to start accepting rides!</p>';
+                }
+            } catch (e) {
+                list.innerHTML = '<p class="empty-state">No rides yet. Go online to start accepting rides!</p>';
+            }
+        }
+
+        async function loadEarnings() {
+            document.getElementById('total-balance').textContent = (captain.total_earnings || 0).toFixed(2);
+        }
+
+        function withdrawEarnings() {
+            const balance = parseFloat(document.getElementById('total-balance').textContent);
+            if (balance < 100) {
+                alert('Minimum withdrawal amount is ₹100');
+                return;
+            }
+            alert('Withdrawal request submitted! Amount will be credited to your bank account within 24 hours.');
+        }
+
+        function captainLogout() {
+            localStorage.removeItem('urbx_captain');
             localStorage.removeItem('userType');
             window.location.href = 'Login/CaptainLogin.html';
         }
 
-        // Fetch Captain Details (if available)
-        // Here we can use localstorage or an API call if user logged in
-        const captainData = localStorage.getItem('urbx_captain');
-        if (captainData) {
-            const captain = JSON.parse(captainData);
-            document.getElementById('captain-name').textContent = captain.name;
-            document.getElementById('captain-age').textContent = 'Age: ' + (captain.age || '--');
-            document.getElementById('vehicle-info').textContent = 'Vehicle Type: ' + (captain.vehicle_type || 'Cab');
-            document.getElementById('total-income').textContent = (captain.total_earnings || 0).toFixed(2);
-        } else {
-             // Redirect if not logged in?
-             // window.location.href = 'Login/CaptainLogin.html';
-        }
+        document.getElementById('captain-profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Profile updated successfully!');
+        });
+
+        window.addEventListener('load', initCaptainDashboard);
     </script>
 </body>
 </html>
-
