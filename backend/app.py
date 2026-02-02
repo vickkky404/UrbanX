@@ -558,7 +558,7 @@ def estimate_fare():
         'Cab': 21.0,
         'Auto': 10.0,
         'Moto': 7.0,
-        'Cycle': 2.0  # Set to 8 Rupees as per request
+        'Cycle': 8.0
     }
 
     estimates = {}
@@ -571,6 +571,38 @@ def estimate_fare():
         "currency": "₹",
         "distance_km": distance_km
     })
+
+
+@app.route('/api/geocode', methods=['GET'])
+def geocode():
+    # Simple proxy to OpenStreetMap Nominatim API
+    # In a production app, you should use a proper geocoding service key (Google Maps, Mapbox, etc.)
+    q = request.args.get('q')
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+
+    headers = {'User-Agent': 'UrbanX/1.0 (urbanx@example.com)'}
+
+    try:
+        if lat and lon:
+            # Reverse Geocode
+            url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}"
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                return jsonify(data)
+        elif q:
+            # Forward Geocode
+            url = f"https://nominatim.openstreetmap.org/search?format=json&q={requests.utils.quote(q)}"
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                return jsonify(data)
+    except Exception as e:
+        print(f"Geocoding error: {e}")
+        return jsonify({"error": "Geocoding service unavailable"}), 503
+
+    return jsonify({})
 
 
 # ========================================
