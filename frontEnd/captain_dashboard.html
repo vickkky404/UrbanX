@@ -191,6 +191,7 @@
                         <div class="profile-info">
                             <h3 id="profile-name">Captain Name</h3>
                             <p id="profile-email">email@example.com</p>
+                            <p id="profile-age-display" style="font-size: 13px; color: #666; margin-top: 4px;">Age: <span id="profile-age">-</span></p>
                         </div>
                     </div>
                     <form id="captain-profile-form">
@@ -201,9 +202,10 @@
                         <div class="form-group">
                             <label>Vehicle Type</label>
                             <select id="edit-vehicle">
-                                <option value="bike">Bike</option>
-                                <option value="auto">Auto</option>
-                                <option value="cab">Cab</option>
+                                <option value="Cycle">Cycle</option>
+                                <option value="Bike">Bike</option>
+                                <option value="Auto">Auto</option>
+                                <option value="Cab">Cab</option>
                             </select>
                         </div>
                         <button type="submit" class="save-btn">Save Changes</button>
@@ -232,7 +234,9 @@
             document.getElementById('captain-vehicle').querySelector('span').textContent = captain.vehicle_type || 'Cab';
             document.getElementById('profile-name').textContent = captain.name || 'Captain';
             document.getElementById('profile-email').textContent = captain.email || '';
+            document.getElementById('profile-age').textContent = captain.age || '-';
             document.getElementById('edit-name').value = captain.name || '';
+            document.getElementById('edit-vehicle').value = captain.vehicle_type || 'Cab';
             document.getElementById('total-balance').textContent = (captain.total_earnings || 0).toFixed(2);
             initMap();
             loadCaptainStats();
