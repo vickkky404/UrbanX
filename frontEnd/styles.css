@@ -315,6 +315,8 @@ footer {
         font-size: 50px;
     }
 }
+
+footer {
     padding: 60px 20px;
     margin-top: 80px;
     border-top: 1px solid #1e293b;
@@ -1107,7 +1109,7 @@ footer {
     padding: 12px;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
-    font-family: "Inter", inherit;
+    font-family: "Inter", "Segoe UI", sans-serif;
     font-size: 16px;
     box-sizing: border-box;
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -1560,6 +1562,57 @@ footer {
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
 }
 
+/* Location Button inside input group */
+.location-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.location-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* Search Results Dropdown */
+.search-results {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.search-results div {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s ease;
+}
+
+.search-results div:last-child {
+    border-bottom: none;
+}
+
+.search-results div:hover {
+    background: #f8fafc;
+}
+
 /* Vehicle Selection Enhancement */
 .vehicle-selection {
     gap: 12px;
@@ -1600,16 +1653,152 @@ footer {
     background: #38bdf8;
 }
 
+/* Vehicle Icon and Details */
+.vehicle-icon-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vehicle-img {
+    font-size: 24px;
+    color: #0f172a;
+    width: 40px;
+    text-align: center;
+}
+
+.vehicle-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vehicle-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.vehicle-sub {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.vehicle-cost {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Ride Info Section */
+.ride-info {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    border: 1px solid #e2e8f0;
+}
+
+.ride-info p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #475569;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ride-info strong {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* Ride Options */
+.ride-options {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.ride-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.ride-option:hover {
+    border-color: #cbd5e1;
+}
+
+.ride-option input[type="radio"] {
+    display: none;
+}
+
+.ride-option input[type="radio"]:checked + span {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.ride-option:has(input[type="radio"]:checked) {
+    border-color: #38bdf8;
+    background: #f0f9ff;
+}
+
+.ride-option span {
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* Schedule Picker */
+.schedule-picker {
+    margin-bottom: 16px;
+}
+
+.schedule-picker input[type="datetime-local"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    color: #0f172a;
+    box-sizing: border-box;
+}
+
+.schedule-picker input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: #38bdf8;
+}
+
+/* Mobile Location Button - Hidden by default on desktop */
+.mobile-location-btn {
+    display: none;
+}
+
 /* Ride Button */
 .ride-btn {
+    width: 100%;
     margin-top: 16px;
     padding: 16px;
     border-radius: 12px;
     background: #0f172a;
+    color: #fff;
+    border: none;
+    font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.5px;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .ride-btn:hover {
