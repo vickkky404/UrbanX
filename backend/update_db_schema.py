@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-# Ensure we are looking in the right place
 db_path = os.path.join(os.path.dirname(__file__), 'instance', 'urbanx.db')
 if not os.path.exists(db_path):
     # try check if running from backend root
@@ -26,7 +25,7 @@ def add_column_if_not_exists(table, column, definition):
         except Exception as e:
             print(f"Error adding '{column}': {e}")
 
-# Captain Table Updates
+
 add_column_if_not_exists('captain', 'age', 'INTEGER')
 add_column_if_not_exists('captain', 'total_earnings', 'REAL DEFAULT 0.0')
 add_column_if_not_exists('captain', 'vehicle_type', 'TEXT')
@@ -37,7 +36,7 @@ add_column_if_not_exists('captain', 'is_verified', 'BOOLEAN DEFAULT 0')
 add_column_if_not_exists('captain', 'is_online', 'BOOLEAN DEFAULT 0')
 add_column_if_not_exists('captain', 'created_at', 'DATETIME')
 
-# User Table Updates
+
 add_column_if_not_exists('user', 'phone', 'TEXT')
 add_column_if_not_exists('user', 'gender', 'TEXT')
 add_column_if_not_exists('user', 'balance', 'REAL DEFAULT 1000.0')
