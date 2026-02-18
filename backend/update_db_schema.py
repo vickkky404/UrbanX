@@ -3,7 +3,8 @@ import os
 
 db_path = os.path.join(os.path.dirname(__file__), 'instance', 'urbanx.db')
 if not os.path.exists(db_path):
-    # try check if running from backend root
+
+
     db_path = os.path.join('instance', 'urbanx.db')
     if not os.path.exists(db_path):
         print(f"Database not found at {db_path}, skipping migration.")
