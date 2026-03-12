@@ -242,7 +242,6 @@ with app.app_context():
     db.create_all()
     ensure_default_admin()
 
-# The route() decorator tells Flask what URL should trigger the function....
 @app.route('/')
 def home():
     return render_template('index.html')
