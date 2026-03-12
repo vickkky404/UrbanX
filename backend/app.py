@@ -287,7 +287,6 @@ def captain_signup_page():
 
 @app.route('/Login/UserLogin.html')
 def user_login_page():
-    # Assuming UserLogin.html exists or will exist in the same structure
     try:
         return render_template('Login/UserLogin.html')
     except:
