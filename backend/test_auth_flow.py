@@ -10,7 +10,7 @@ def test_captain_flow():
     rand_id = random.randint(1000, 9999)
     email = f"capt_{rand_id}@urbanx.com"
 
-    # 1. Signup
+
     signup_data = {
         "name": f"Captain {rand_id}",
         "email": email,
