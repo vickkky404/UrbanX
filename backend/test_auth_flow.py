@@ -56,7 +56,7 @@ def test_captain_flow():
     else:
         print(f"   [FAIL] Login Failed: {r.status_code} - {r.text}")
 
-    # 3. Login with WRONG vehicle
+
     print("3. Attempting Login with WRONG vehicle type...")
     login_wrong = {
         "email": email,
