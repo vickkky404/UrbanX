@@ -71,6 +71,10 @@ def test_captain_flow():
 
     print("--- Test Complete ---")
 
+
+    print("Testing done, conducting Unit testing")
+    print("JUnit, Selenium.....\n\testing")
+
 if __name__ == "__main__":
     test_captain_flow()
 
