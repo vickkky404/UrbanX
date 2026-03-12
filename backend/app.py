@@ -413,7 +413,6 @@ def captain_signup():
             age = int(age)
         except (TypeError, ValueError):
             return jsonify({"status": "error", "message": "Age must be a number"}), 400
-        # Allow teens (16+) for cycle, 18+ for bike/auto, 21+ for cab
         if age < 16 or age > 80:
             return jsonify({"status": "error", "message": "Age must be between 16 and 80"}), 400
 
