@@ -261,7 +261,6 @@ def services():
 @app.route('/contact.html', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # logic to handle contact form submission
         return render_template('contact.html') # Or redirect to a thank you page
     return render_template('contact.html')
 
