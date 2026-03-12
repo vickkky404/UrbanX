@@ -416,7 +416,6 @@ def captain_signup():
         if age < 16 or age > 80:
             return jsonify({"status": "error", "message": "Age must be between 16 and 80"}), 400
 
-        # Validate age requirements for vehicle type
         if vehicle_type == 'Cab' and age < 21:
             return jsonify({"status": "error", "message": "You must be 21+ to drive a Cab"}), 400
         if vehicle_type in ['Bike', 'Auto'] and age < 18:
