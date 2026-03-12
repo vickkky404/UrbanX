@@ -10,7 +10,6 @@ import time
 from functools import wraps
 
 
-# Configured to serve templates and static files (css/images) from the frontEnd directory
 app = Flask(__name__, template_folder='../frontEnd', static_folder='../frontEnd', static_url_path='')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urbanx.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
