@@ -296,7 +296,6 @@ def user_login_page():
 def user_signup_page():
     return render_template('Login/UserSignup.html')
 
-# Route handlers for login/signup API logic
 @app.route('/user/signup', methods=['POST'])
 def user_signup():
     data = request.get_json(silent=True) or request.form
