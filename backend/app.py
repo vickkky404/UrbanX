@@ -19,7 +19,7 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = os.environ.get('URBANX_SECURE_COOKIES', '0') == '1'
 db = SQLAlchemy(app)
 
-# Security constants
+
 RATE_LIMIT_STORE = {}
 RATE_LIMIT_WINDOW_SECONDS = 600
 RATE_LIMIT_MAX_ATTEMPTS = 8
