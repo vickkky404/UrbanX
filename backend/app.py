@@ -9,7 +9,7 @@ import re
 import time
 from functools import wraps
 
-# creates the instance for the flask  class
+
 # Configured to serve templates and static files (css/images) from the frontEnd directory
 app = Flask(__name__, template_folder='../frontEnd', static_folder='../frontEnd', static_url_path='')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urbanx.db'
