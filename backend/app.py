@@ -426,7 +426,7 @@ def captain_signup():
     if Captain.query.filter_by(email=email).first():
         return jsonify({"status": "error", "message": "Email already registered"}), 400
 
-    # Set is_verified to False for young captains requiring document verification
+
     is_verified = True if age and age > 21 else False
 
     captain = Captain(
