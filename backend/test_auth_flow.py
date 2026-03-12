@@ -31,7 +31,6 @@ def test_captain_flow():
         print(f"   [FAIL] Exception during signup: {e}")
         return
 
-    # 2. Login with CORRECT vehicle
     print("2. Attempting Login with CORRECT vehicle type...")
     login_correct = {
         "email": email,
