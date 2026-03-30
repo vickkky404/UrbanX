@@ -104,7 +104,7 @@ class SavedPlace(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(255), nullable=False)
-    place_type = db.Column(db.String(50), default='custom')  # home, work, custom
+    place_type = db.Column(db.String(50), default='custom')
     lat = db.Column(db.Float, nullable=True)
     lon = db.Column(db.Float, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
