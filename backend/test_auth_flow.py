@@ -60,7 +60,7 @@ def test_captain_flow():
     login_wrong = {
         "email": email,
         "password": "password123",
-        "vehicle_type": "cab" # Mismatch
+        "vehicle_type": "cab"
     }
     r = requests.post(f"{base_url}/captain/login", json=login_wrong)
     if r.status_code == 401:
